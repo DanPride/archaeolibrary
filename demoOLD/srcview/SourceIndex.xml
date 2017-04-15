@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of demo</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node icon="cssIcon" label="history.css" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node icon="htmlIcon" label="historyFrame.html" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node icon="htmlIcon" label="index.template.html" url="source/html-template/index.template.html"/>
+			<node icon="swfIcon" label="playerProductInstall.swf" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="libs">
+		</node>
+		<node label="src">
+			<node label="php">
+				<node label="Demo35.php" url="source/php/Demo35.php.txt"/>
+			</node>
+			<node icon="actionScriptIcon" label="DemoScript.as" url="source/DemoScript.as.html"/>
+			<node icon="mxmlAppIcon" selected="true" label="index.mxml" url="source/index.mxml.html"/>
+			<node icon="actionScriptIcon" label="LoginScript.as" url="source/LoginScript.as.html"/>
+		</node>
+	</nodes>
+</index>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" pageTitle="Fields" 
+				creationComplete="initApp()"  backgroundGradientColors="[#54BAF5, #FFFFFF]" backgroundGradientAlphas="[1.0, 1.0]" 
+				themeColor="#FFFFFF" viewSourceURL="srcview/index.html">
+
+	<mx:Script source="LoginScript.as" />
+	<mx:Script source="FieldsScript.as" />
+	
+	<mx:StringValidator id="confirmFieldVal" source="{FieldInput}" property="text" required="true"  minLength="{fieldMinLength}" maxLength="{fieldMaxLength}" />	
+	<mx:NumberValidator id="FieldVal" source="{FieldInput}" property="text"  maxValue="{fieldMaxValue}"  minValue="{fieldMinValue}" 
+						triggerEvent="" requiredFieldError="Invalid Field Value"/>  
+
+<mx:ViewStack id="applicationScreens" width="500" height="100%" visible="{theVisible}" horizontalCenter="0">
+		<mx:Canvas id="home" width="100%" height="100%">
+			<mx:Button label="Home"  click="buttonHome_clickHandler(event)" id="buttonHome" width="100" top="20" horizontalCenter="144"/>
+			<mx:DataGrid id="dataGrid"
+						 dataProvider="{dataArr}"
+						 editable="true"
+						 resizableColumns="true" 
+						 headerRelease="setOrder(event);"
+						 top="80"  bottom="60" horizontalCenter="0" width="430">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Name" dataField="NameCol" width="50" editable="false"/>
+					<mx:DataGridColumn headerText="Open" dataField="OpenCol" width="70" editorDataField="value" editable="{permsAdminValue}" >
+					<mx:itemEditor>
+						<mx:Component>
+							<mx:ComboBox editable="false">
+								<mx:dataProvider>
+									<mx:String>Open</mx:String>
+									<mx:String>Closed</mx:String>
+								</mx:dataProvider>
+							</mx:ComboBox>
+						</mx:Component>
+					</mx:itemEditor>
+						</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Code" dataField="CodeCol" width="60"   editable="{permsAdminValue}" textAlign="center"/>
+					<mx:DataGridColumn headerText="Field" dataField="FieldCol" width="100"   editable="{permsAdminValue}" textAlign="center"/>
+					<mx:DataGridColumn headerText="Supervisor" dataField="SupervisorCol" width="150" editable="{permsAdminValue}"/>
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:ComboBox  id="filterTxt" change="filterResults()" horizontalCenter="0" top="50">
+				<mx:dataProvider>
+					<mx:String>All</mx:String>
+					<mx:String>Open</mx:String>
+					<mx:String>Closed</mx:String>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:Button id="saveListsButton" click="goToUpdate()" enabled="{permsAdminValue}" icon="@Embed(source='icons/AddRecord.png')" width="43" horizontalCenter="172" top="50"/>
+			<mx:Button id="instructionsButton" width="100" label="Instructions"  click="goToInstructions()" tabIndex="1" toolTip="Instructions for the Use of this Screen"  horizontalCenter="-143" top="22"/>
+			<mx:Label text="{loginName}" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" y="0" horizontalCenter="-143"/>
+			<mx:Label y="10" text="Fields List" textAlign="center" horizontalCenter="0" fontWeight="bold" fontSize="14"/>
+			
+		</mx:Canvas>
+		
+		<mx:Canvas id="update" height="100%"  width="100%">
+			<mx:VBox horizontalAlign="center" horizontalCenter="0"  top="150" >
+				<mx:Form width="400" height="164" id="FieldsForm" horizontalCenter="0">
+					<mx:HBox>
+					<mx:FormItem labelWidth="75" label="Field:" id="field_name">
+						<mx:TextInput id="FieldInput" text="" width="100" fontSize="12" tabIndex="1"/>
+					</mx:FormItem>
+						<mx:Spacer width="5"/>
+					<mx:FormItem labelWidth="40" label="Code:" id="field_code" width="96">
+						<mx:TextInput id="CodeInput" text="" width="25" editable="false" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="12" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" tabIndex="5"/>
+					</mx:FormItem>
+					</mx:HBox>
+					
+					<mx:FormItem label="Supervisor:" id="field_super" labelWidth="75">
+						<mx:TextInput id="SupervisorInput" text="" width="258" fontSize="12" tabIndex="2"/>
+					</mx:FormItem>
+					
+					<mx:HBox width="345"  horizontalAlign="right">
+						<mx:FormItem label="Open:" id="field_open" width="176" textAlign="right">
+							<mx:ComboBox id="OpenColComboBox" tabIndex="3">
+								<mx:dataProvider>
+									<mx:String>Open</mx:String>
+									<mx:String>Closed</mx:String>
+								</mx:dataProvider>
+							</mx:ComboBox>
+						</mx:FormItem>
+						<mx:Button label="Cancel" id="btnCancel" click="goToHome()"/>
+						<mx:Button label="Save" id="btnSubmit" click="insertItem()" enabled="{permsAdminValue}" horizontalGap="30" tabIndex="4"/>
+					</mx:HBox>
+				</mx:Form> 
+			</mx:VBox>
+		</mx:Canvas>
+		<mx:Canvas id="instructions" width="100%">
+			<mx:Button id="homeButton" label="Done" width="100" click="goToHome()" top="23" left="25"/>
+			<mx:TextArea id="Instructions" width="395" top="80" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15" verticalScrollPolicy="auto" text="Fields, Squares, Users, Periods and Lists can only be accessed by the Dig Director and program design staff.&#xd;&#xd;This permission can not be delegated.&#xd;&#xd;It is recomended, but not required that Field designations be  a single alphabetic character. Entries up to Ten characters are allowed.&#xd;&#xd;For Field designations with more that one character allowed in the _Setup.php file (in the includes folder), a single character Alphabetic Code is automatically generated and used the the Name/Id fields of all items, squares,loci, baskets and items in that field.&#xd;&#xd;When a single letter designation is specified in the Setup.php file that letter is automatically used in all descending Name/Id assignations.&#xd;&#xd;&#xd;">
+			</mx:TextArea>
+			<mx:Button label="Open Source" top="23" id="sourceButton" click="sourceButton_clickHandler(event)" width="100" right="25"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+</mx:Application>

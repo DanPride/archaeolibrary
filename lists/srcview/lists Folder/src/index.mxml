@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" pageTitle="Lists" 
+				creationComplete="initApp()"  backgroundGradientColors="[#54BAF5, #FFFFFF]" backgroundGradientAlphas="[1.0, 1.0]" 
+				themeColor="#FFFFFF" viewSourceURL="srcview/index.html">
+
+	<mx:Script>
+		<![CDATA[
+			protected function buttonHome_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest('../demo/'), '_self');
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Script source="LoginScript.as" />
+	<mx:Script source="ListsScript.as" />
+	<mx:ViewStack id="applicationScreens" horizontalCenter="0" width="400" height="100%" visible="{theVisible}">
+		<mx:Canvas id="home" width="100%" height="100%">
+			<mx:Button label="Home"  click="buttonHome_clickHandler(event)" id="buttonHome" width="100" top="20" horizontalCenter="125"/>
+			<mx:DataGrid id="dataGrid"
+						 dataProvider="{dataArr}"
+						 editable="true"
+						 resizableColumns="true" 
+						 headerRelease="setOrder(event);"
+						 x="50" top="80"  bottom="60">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Id" dataField="IdCol" width="50" editable="{permsAdminValue}" />
+					<mx:DataGridColumn headerText="Type" dataField="TypeCol" width="70" editable="{permsAdminValue}"/>
+					<mx:DataGridColumn headerText="Vessel" dataField="VesselCol" width="175" editable="{permsAdminValue}"/>
+				</mx:columns>
+			</mx:DataGrid>
+			
+			
+			<mx:Label text="Search by Type" x="154" y="24" id="label1"/>
+			<mx:ComboBox  id="filterTxt" change="filterResults()" horizontalCenter="0" top="50">
+				<mx:dataProvider>
+					<mx:String>All</mx:String>
+					<mx:String>Pottery</mx:String>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:Button id="saveListsButton" click="goToUpdate()" enabled="{permsAdminValue}" icon="@Embed(source='icons/AddRecord.png')" width="43" horizontalCenter="125" top="50"/>
+			<mx:Button id="deleteListsButton" click="deleteItem()" enabled="{permsAdminValue}" icon="@Embed(source='icons/DeleteRecord.png')" width="41" horizontalCenter="124" bottom="25"/>
+			<mx:Button id="instructionsButton" width="100" label="Instructions"  click="goToInstructions()" tabIndex="1" toolTip="Instructions for the Use of this Screen"  horizontalCenter="-125" top="20"/>
+			<mx:Label text="{loginName}" top="1" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" horizontalCenter="-125"/>
+		</mx:Canvas>
+		
+		<mx:Canvas id="update" height="30%"  >
+			<mx:VBox horizontalAlign="center" x="50" y="60">
+				<mx:Form width="272" height="153" id="VesselsForm"  x="300">
+					<mx:FormItem label="Type:" id="Type_form">
+						<mx:ComboBox  id="TypeCol" x="567.5" y="24">
+							<mx:dataProvider>
+								<mx:String>All</mx:String>
+								<mx:String>Pottery</mx:String>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Vessel:" id="Vessel_form">
+						<mx:TextInput id="VesselCol" text=""/>
+					</mx:FormItem>
+					<mx:HBox width="218"  horizontalAlign="right">
+						<mx:Button label="Cancel" id="btnCancel" click="goToHome()"/>
+						<mx:Button label="Save" id="btnSubmit" click="insertItem()" horizontalGap="30"/>
+					</mx:HBox>
+				</mx:Form> 
+			</mx:VBox>
+		</mx:Canvas>
+
+		<mx:Canvas id="instructions" width="100%" height="100%">
+			<mx:Button id="homeButton" label="Home" width="100" click="goToHome()" top="20" horizontalCenter="-125"/>
+			<mx:TextArea id="Instructions" width="250" top="50" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15" verticalScrollPolicy="auto" text="Lists and Period choices are definable by the Director and System Admin only.&#xd;&#xd;This permission can not be delegated.&#xd;&#xd;">
+			</mx:TextArea>
+			<mx:Button label="Open Source" horizontalCenter="125" top="20" id="sourceButton" click="sourceButton_clickHandler(event)" width="100"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+</mx:Application>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" pageTitle="Staff" 
+				creationComplete="initApp()" backgroundGradientColors="[#54BAF5, #FFFFFF]" backgroundGradientAlphas="[1.0, 1.0]" 
+				themeColor="#FFFFFF" viewSourceURL="srcview/index.html">
+
+	<mx:Script source="LoginScript.as" />	
+	<mx:Script source="StaffScript.as" />	
+
+	<mx:ViewStack id="applicationScreens" width="800" height="100%" visible="{theVisible}" >
+		<mx:Canvas id="home" width="100%" height="100%">	
+			<mx:Button id="insructionsButton" width="100" label="Instructions"  click="insructionsButton_clickHandler(event)"  top="19" horizontalCenter="-300"/>
+			<mx:Button id="buttonHome" label="Home"  click="buttonHome_clickHandler(event)"  width="100" toolTip="Returns you to your Home Page" top="20" horizontalCenter="300"/>
+			<mx:ComboBox  id="filterTxt"  close="filterTxt_closeHandler(event)" horizontalCenter="0" top="19">
+				<mx:dataProvider>
+					<mx:String>Active</mx:String>
+					<mx:String>Inactive</mx:String>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:DataGrid id="dataGrid"
+						 dataProvider="{dataArr}"  width="700" rowHeight="25" editable="{permsAdminValue}" 
+						 resizableColumns="true" themeColor="#009DFF"  headerRelease="setOrder(event);" horizontalCenter="0" bottom="60" top="50">
+				<mx:columns>		
+					<mx:DataGridColumn headerText="Id" dataField="IdCol"  width="30" textAlign="right"/>
+					<mx:DataGridColumn headerText="Position" dataField="PositionCol" width="100" textAlign="left">
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Field Archaeologist</mx:String>
+										<mx:String>Yard Supervisor</mx:String>
+										<mx:String>Square Supervisor</mx:String>
+										<mx:String>Square Assistant</mx:String>
+										<mx:String>Digger</mx:String>
+										<mx:String>Sys Admin</mx:String>
+										<mx:String>Developer</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Name" dataField="NameCol" width="120" textAlign="center" />
+					<mx:DataGridColumn headerText="Active" dataField="StatusCol" width="70" textAlign="center" >
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Active</mx:String>
+										<mx:String>Inactive</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Admin" dataField="PermsAdminCol" width="70" textAlign="center" >
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Granted</mx:String>
+										<mx:String>Denied</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Add" dataField="PermsAddCol" width="70" textAlign="center" >
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Granted</mx:String>
+										<mx:String>Denied</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Modify" dataField="PermsModCol" width="70" textAlign="center" >
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Granted</mx:String>
+										<mx:String>Denied</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Delete" dataField="PermsDeleteCol" width="70" textAlign="center" >
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Granted</mx:String>
+										<mx:String>Denied</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Set Password"  width="100">
+						<mx:itemRenderer>	
+							<mx:Component>
+								<mx:HBox horizontalAlign="center">
+									<mx:Button label="Password" width="90" click="outerDocument.setPassView(data.IdCol)"/>
+								</mx:HBox>
+							</mx:Component>
+						</mx:itemRenderer>
+					</mx:DataGridColumn>
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:Button id="addStaffButton" click="goToUpdate()" icon="@Embed(source='icons/AddRecord.png')" width="43" horizontalCenter="150" top="20"/>
+			<mx:Label text="{loginName}" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" top="2" horizontalCenter="-300"/>
+			<mx:Button id="deleteListsButton" click="deleteItem()" enabled="{permsAdminValue}" icon="@Embed(source='icons/DeleteRecord.png')" width="41" horizontalCenter="330" bottom="30"/>
+			<mx:Button id="setDirectorButton" y="19" label="Set Director." horizontalCenter="-150" width="100" click="setDirectorButton_clickHandler(event)" />
+	</mx:Canvas>
+		<mx:Canvas id="setPassword" width="1024" height="100%">
+			<mx:TextInput id="PassInput1" horizontalCenter="50" verticalCenter="-100" width="200"/>
+			<mx:TextInput id="PassInput2" horizontalCenter="50" verticalCenter="-50" width="200"/>
+			<mx:Label text="Enter Password" verticalCenter="-100" horizontalCenter="-100"/>
+			<mx:Label text="Re-Enter " horizontalCenter="-100" verticalCenter="-50"/>
+			<mx:Label text="{passSetMessage}" id="passMessage" horizontalCenter="25" fontSize="14" fontWeight="bold" verticalCenter="-150"/>
+			<mx:Button label="Set Password" id="setPassButton" enabled="{permsAdminValue}" verticalCenter="0" horizontalCenter="95" click="setPassButton_clickHandler(event)" width="110"/>
+			<mx:Button label="Cancel" id="cancelSetPassButton" click="cancelSetPassButton_clickHandler(event)" horizontalCenter="-15" width="70" verticalCenter="0"/>
+		</mx:Canvas>
+
+		<mx:Canvas id="update" width="1024" height="30%"  >
+			<mx:VBox  horizontalCenter="0" verticalCenter="0">
+				<mx:Form width="354" height="100%" id="SquaresForm"  horizontalCenter="0" verticalCenter="-20" textAlign="left">
+					<mx:FormItem label="Name:" id="Staff_Name">
+						<mx:TextInput id="NameInput" text="" />
+					</mx:FormItem>
+					<mx:FormItem label="Password:" id="Staff_Pass">
+						<mx:TextInput id="PasswordInput" text="" />
+					</mx:FormItem>
+					<mx:FormItem label="Position:" id="Staff_Position">
+						<mx:ComboBox id="Position" dataProvider="{positionList}" />
+					</mx:FormItem>
+					<mx:FormItem label="Status:" id="Staff_open">
+						<mx:ComboBox  id="StatusInput" x="567.5" y="24">
+							<mx:dataProvider>
+								<mx:String>Active</mx:String>
+								<mx:String>Inactive</mx:String>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Admin:" id="Staff_Admin">
+						<mx:ComboBox editable="false" id="AdminInput"  dataProvider="{permList}" />
+					</mx:FormItem>
+					<mx:FormItem label="Add:" id="Staff_Add">
+						<mx:ComboBox editable="false" id="AddInput" dataProvider="{permList}" />
+					</mx:FormItem>
+					<mx:FormItem label="Modify:" id="Staff_Mod">
+						<mx:ComboBox editable="false" id="ModInput" dataProvider="{permList}" />
+					</mx:FormItem>
+					<mx:FormItem label="Delete:" id="Staff_Delete">
+						<mx:ComboBox editable="false"  id="DeleteInput"  dataProvider="{permList}" />
+					</mx:FormItem>
+					<mx:Spacer height="20"/>
+					<mx:HBox width="218"  horizontalAlign="right">
+						<mx:Button label="Cancel" id="btnCancel" click="goToHome()"/>
+						<mx:Button label="Save" id="btnSubmit" click="insertItem()" horizontalGap="30" enabled="{permsAdminValue}"/>
+					</mx:HBox>
+				</mx:Form> 
+			</mx:VBox>
+			<mx:Label text="Enter New User" width="216" id="enterheader" textAlign="center" fontWeight="bold" fontSize="14" horizontalCenter="0" verticalCenter="-200"/>
+		</mx:Canvas>
+		<mx:Canvas id="Instructions" width="100%" height="100%">
+			<mx:Button id="homeButton" label="Home" width="100"  click="homeButton_clickHandler(event)" top="20" horizontalCenter="-300"/>
+			<mx:TextArea id="InstructionsText" width="700" top="50" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15" verticalScrollPolicy="auto">
+				<mx:text><![CDATA[The Staff screen controls staff and visitor access to the Excavations Records. 
+					
+The Staff screen can only be modified by the Dig Director or System Design Staff. For the purposes of this demo the the user is the Director.  System Admin Users passwords are set in the programming. The Director Name and Password is set in the _Setup file in the Includes Folder during system installation. The Set Director Password button on the Staff screen works for all users including the View_Only user. The values in the _Setup.php file in the includes folder are accessible only to users with ftp access to system files.
+					
+To set permissions for other staff the Director simply clicks on the relevant  permission (Add, Modify or Delete) and selects "Granted" or "Denied". 
+					
+The New User screen allows the setting of passwords for users which can be modified at any time by the Director on this screen via the "Set Password" button.
+					
+All users allowed into the database are granted view access to the database. In compliance with the the new United States National Science Foundation Grant requirements for transparancy, (which we strongly endorse) a "View_Only" user with an automatic password entry is provided at User Id 4.
+					
+This can be made inactive at the Director's indescretion. Inactivating "View Only" effectively makes the system private, available only to staff with password access and only to the extent that permissions are granted or denied on thier accounts by the Director. The "View Only" Account requires no Password and Entry is automatic for this user if it is active.
+
+For Directors wishing to proved view only access to students and volunteers only, a user account with view only permissions and a password can be set up and distributed to the volunteers allowing them, and anyone else with that password to access the system. All system access and page views are recorded in the Staff usage screen with the originating IP address.
+					
+Permissions in the March release will be database wide for each user. Subsequent releases will include a more detailed control of record access, allowing Read, Write, and Delete permissions to be allocated on a Dig Wide, Field, Square, Locus or even Bucket level. These extensions will be used for upcoming features such as Square and Digger daily "diary"  logs and pottery calls for the areas they are assigned etc At that time the "Granted" or "Denied Values will be replace by the Name value for the area targeted. (GZA = Gezer Field A, GZAY10 = Square Y10 only etc) for each permission.
+				]]></mx:text>
+			</mx:TextArea>
+			<mx:Button label="Open Source" horizontalCenter="300" top="20" id="sourceButton" click="sourceButton_clickHandler(event)"/>
+		</mx:Canvas>
+			</mx:ViewStack>
+
+</mx:Application>

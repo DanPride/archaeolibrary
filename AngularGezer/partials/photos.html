@@ -1,0 +1,71 @@
+<section class="artifactpage">
+	<div class="search">
+		<h1>Tel Gezer Artifact Photos</h1>
+		<div style="float:right"><a href="/" style="display:inline"><font  color=#c61c6f>Home<font></a></div> 
+		<div style="float:right;padding-right:20px;"><a href="#/list" style="display:inline"><font color=#c61c6f>Catalog<font></a></div>	
+	
+		<h2 class="botpad">PhpMySql with AngularJs - Allow 30 Seconds to
+			Load</h2>
+		<div class="botpad">
+			<label>search: </label> <input ng-model="query"
+				placeholder="Search for Photo" autofocus>
+		</div>
+		<label class="formgroup">Showing: <select
+			ng-model="totalDisplayed">
+				<option value="100">100</option>
+				<option value="1000">1,000</option>
+				<option value="5000">5,000</option>
+				<option value="10000">10,000</option>
+				<option value="{{ wait | number }}">{{ wait | number }}</option>
+		</select>
+		</label> <label class="formgroup"> sorted by: <select
+			ng-model="photoOrder">
+				<option value="Category">Category</option>
+				<option value="Name">Name</option>
+				<option value="Field">Field</option>
+				<option value="Square">Square</option>
+				<option value="Locus">Locus</option>
+				<option value="Basket">Basket</option>
+				<option value="Object">Object</option>
+				<option value="Description">Description</option>
+				<option value="FolderName">FolderName</option>
+				<option value="FileName">FileName</option>
+				<option value="Comments">Comments</option>
+				<option value="CreateDate">CreateDate</option>
+		</select>
+		</label> <label class="formgroup"> <input type="radio"
+			ng-model="direction" name="direction" checked> ascending
+		</label> <label class="formgroup"> <input type="radio"
+			ng-model="direction" name="direction" value="reverse">
+			descending
+		</label>
+
+		<div style="float: right">
+			{{ (totalDisplayed | number) }} <font color=#c61c6f>{{ avail
+				}}</font> {{(wait | number) || "Loading" }}
+		</div>
+	</div>
+	<ul class="artifactlist">
+		<li ng-animate="'animate'" class="artifact cf"
+			ng-repeat="photo in photos | filter: query | orderBy: photoOrder:direction | limitTo: totalDisplayed ">
+			<div class="gallery">
+				<div class="img-wrap">
+			<a href="#/photo/{{photo.Name}}">
+					<img ng-src="http://archaeolibrary.com/gezer/images/{{photo.FolderName}}/000Tmb/{{photo.FileName}}" alt="{{photo.FolderName}}/{{photo.FileName}}>
+				</div></div>
+					<div class="info">
+					<h2>{{photo.Name}} S: {{photo.Square}} L:
+						{{photo.Locus}} B: {{photo.Basket}} {{photo.Object}}
+						{{photo.Description}} 	{{photo.FolderName}} 	{{photo.FileName}}
+						{{photo.Comments}} 	{{photo.CreateDate}} {{photo.Thumb}}
+					
+				</div>
+				</h2>
+				<h3>
+					<div style="display: inline">{{photo.DFC.substring(0,10)}}
+				</h3>
+				</div>
+		</a>
+		</li>
+	</ul>
+</section>

@@ -1,0 +1,161 @@
+
+	
+html {height: 100%; width:100%; }
+body {width:100%; height:100%; margin: 0px; padding:0px; border:0px;
+		font-family: Verdana, Arial, Helvetica, sans-serif; background: #999966;
+		font-size: 13px; line-height: 15px;}
+		
+table {background: #FFFFFF;}
+table.head {background: #999966;}
+tbody tr:hover, tbody tr:hover .shaded {
+	background: #999966;
+}
+ul.loginbuttons {
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	width:140px;
+}
+ul.loginbuttons li{
+	text-align: center;
+	float: left;
+	width: 140px;
+	display: block;
+	padding: 0.3em;
+	background-color:#716744;
+	margin : 0.5em;
+}
+li a{
+	color: white;
+	text-decoration:none;
+	padding:0.4em 2em;
+	display: block;
+}
+li a:hover {
+	background-color:white;
+	color:#716744}
+
+ul.entry{
+	list-style-type:none;
+	width : 80px;
+	margin : 0;
+	padding : 0;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;	
+}
+ul.entry li {
+	border: solid white 0.5px;
+	border-top: solid #887766;
+	text-align: center;
+	float: left;
+	width: 100px;
+	display: block;
+	background-color:#716744;
+	margin : 0.5em  0.5em;
+
+}
+td {
+			border-bottom: navy solid thin;
+			border-top: navy solid thin;
+			border-left: none;
+			border-right: none;
+		}
+		
+		div#main td {
+					border-bottom: none;
+					border-top: none;
+					border-left: none;
+					border-right: none;
+				}
+		
+		.shaded {
+			background:#CDCDCD;
+		}
+		img	{border:none; }
+		table, tr, td {border-collapse: collapse; vertical-align: top; font-size: 13px; line-height: 15px;}	
+		a { color: #7B919C;}
+
+		#header {height:70px; margin: 0px; padding: 0px; text-align: left;
+				background: #716744; color:#FFF; }	
+		#header h1 { padding: 1em; margin: 0px;	}
+		#main { margin: 0px; padding: 0px; height: 600px; width: 100%; background: #999966;}
+		#structure {height: 600px; width: 100%;}
+		#footer {height: 2em; margin: 0px; padding: 1em; text-align: center; 
+			background: #716744; color: #D4E6F4; }
+		#login { margin: 0px; padding: 0px; background: #999966; color:#FFF;}
+
+
+		/* Navigation */
+		#navigation {width: 150px; padding: 1em 2em; color: #FFFFFF; background: #716744; }
+		#navigation a {color: #CDCDCD; text-decoration: none; }
+		ul.subjects {padding-left: 0; list-style: none; }
+		ul.pages {padding-left: 2em; list-style: square; }
+		.selected { font-weight: bold; }
+
+		/* Page Content */
+		#page { padding-left: 2em; vertical-align: top; background: #999966; }
+		#page h2 { color: #FFF; margin-top: 1em; }
+		#page h3 { color: #FFF;}
+		
+		
+		
+h1 {font-size: 18pt; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; }
+h2 {font-size: 14pt; line-height: 125%; font-family: Verdana, Arial, Helvetica, sans-serif; }
+
+td.name   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.field  { color: black; text-align: center; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.square { color: black; text-align: center; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.basket { color: black; text-align: center; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.locus  { color: black; text-align: center; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.type   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.period { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.quan   { color: black; text-align: center; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.saved  { color: black; text-align: center; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.descr  { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal; width: 150px;} 
+td.comm   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.disp   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.date   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.contents { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal; width: 300px;} 
+td.status   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.shortlist   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal; width: 100px;} 
+td.count { color: black; text-align: right; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;}
+
+td.namedata   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.fielddata  { color: black; text-align: center; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.squaredata { color: black; text-align: center; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.basketdata { color: black; text-align: center; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.locusdata  { color: black; text-align: center; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.typedata   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.perioddata { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.quandata   { color: black; text-align: center; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.saveddata  { color: black; text-align: center; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.descrdata  { color: black; text-align: left; font-size: 12px; font-weight:normal; font-family:Helvetica; font-style:normal; width: 150px;} 
+td.commdata   { color: black; text-align: left; font-size: 12px; font-weight:normal; font-family:Helvetica; font-style:normal;width: 150px;} 
+td.dispdata  { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.datedata   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.contentsdata { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal; width: 300px;} 
+td.statusdata   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.shortlistdata   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal; width: 100px;} 
+td.countdata { color: black; text-align: right; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+		
+td.userId   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.userName   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.userPage { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal; width: 100px;} 
+td.userIP  { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;} 
+td.userAgent   { color: black; text-align: left; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal; width: 300px;} 
+td.userDate { color: black; text-align: right; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;}
+td.userTime { color: black; text-align: right; font-size: 14px; font-weight:bold; font-family:Helvetica; font-style:normal;}
+
+td.userIdData   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.userNameData   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.userPageData { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal; width: 100px;} 
+td.userIPData  { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;} 
+td.userAgentData   { color: black; text-align: left; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal; width: 300px;} 
+td.userDateData { color: black; text-align: right; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;}
+td.userTimeData { color: black; text-align: right; font-size: 14px; font-weight:normal; font-family:Helvetica; font-style:normal;}
+
+
+
+
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of fields</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node icon="cssIcon" label="history.css" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node icon="htmlIcon" label="historyFrame.html" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node icon="htmlIcon" label="index.template.html" url="source/html-template/index.template.html"/>
+			<node icon="swfIcon" label="playerProductInstall.swf" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="libs">
+		</node>
+		<node label="src">
+			<node label="icons">
+				<node icon="imageIcon" label="AddRecord.png" url="source/icons/AddRecord.png.html"/>
+				<node icon="imageIcon" label="DeleteRecord.png" url="source/icons/DeleteRecord.png.html"/>
+				<node icon="imageIcon" label="SearchRecord.png" url="source/icons/SearchRecord.png.html"/>
+			</node>
+			<node label="php">
+				<node label="Fields.php" url="source/php/Fields.php.txt"/>
+			</node>
+			<node icon="actionScriptIcon" label="FieldsScript.as" url="source/FieldsScript.as.html"/>
+			<node icon="mxmlAppIcon" selected="true" label="index.mxml" url="source/index.mxml.html"/>
+			<node icon="actionScriptIcon" label="LoginScript.as" url="source/LoginScript.as.html"/>
+		</node>
+	</nodes>
+</index>

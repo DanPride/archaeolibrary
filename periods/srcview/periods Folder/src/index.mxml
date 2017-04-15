@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" pageTitle="Periods" 
+				creationComplete="initApp()" backgroundGradientColors="[#54BAF5, #FFFFFF]" backgroundGradientAlphas="[1.0, 1.0]" 
+				themeColor="#FFFFFF"  viewSourceURL="srcview/index.html">
+
+	<mx:Script>
+		<![CDATA[
+			protected function buttonHome_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest('../demo/'), '_self');
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Script source="LoginScript.as" />
+	<mx:Script source="PeriodsScript.as" />
+	<mx:ViewStack id="applicationScreens" width="700" height="100%" visible="{theVisible}" horizontalCenter="0">
+		<mx:Canvas id="home" width="100%" height="100%">
+			<mx:Button label="Home"  click="buttonHome_clickHandler(event)" id="buttonHome" width="100" top="20" horizontalCenter="285"/>
+			<mx:DataGrid id="dataGrid"
+						 dataProvider="{dataArr}"
+						 editable="true"
+						 resizableColumns="true" 
+						 headerRelease="setOrder(event);" bottom="50" top="50" themeColor="#009DFF" horizontalCenter="0">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Id" dataField="IdCol"  textAlign="right" width="50"/>
+					
+					<mx:DataGridColumn headerText="Code" dataField="CodeCol" width="100"  textAlign="center" editable="false"/>
+					<mx:DataGridColumn headerText="Period" dataField="PeriodCol" width="125"  editable="false"/>
+					<mx:DataGridColumn headerText="SubPeriod" dataField="SubPeriodCol" width="225" editable="false"/>
+					<mx:DataGridColumn  headerText="Visible" dataField="VisibleCol" width="90" editorDataField="value" textAlign="center" editable="{permsAdminValue}"> 
+						<mx:itemEditor>
+							<mx:Component>
+								<mx:ComboBox editable="false">
+									<mx:dataProvider>
+										<mx:String>Visible</mx:String>
+										<mx:String>Hidden</mx:String>
+									</mx:dataProvider>
+								</mx:ComboBox>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+					<mx:DataGridColumn headerText="Order" dataField="ListOrderCol" width="50" textAlign="right" editable="{permsAdminValue}" />
+				</mx:columns>
+			</mx:DataGrid>
+			
+			<mx:Button id="addPeriodsButton" enabled="{permsAdminValue}" click="goToUpdate()" icon="@Embed('icons/AddRecord.png')" toolTip="Add Record" top="20" horizontalCenter="141"/>
+			<mx:Button id="instructionsButton" width="100" label="Instructions"  click="goToInstructions()" tabIndex="1" toolTip="Instructions for the Use of this Screen"  horizontalCenter="-285" top="20"/>
+			<mx:Button id="deletePeriodsButton" click="deleteItem()" icon="@Embed('icons/DeleteRecord.png')" toolTip="Delete Record" horizontalCenter="275" bottom="20"/>
+			<mx:ComboBox id="popList" dataProvider="{popChoices}"  close="closeHandler(event);" width="166" themeColor="#009DFF" horizontalCenter="0" top="20"/>
+			<mx:Label text="{loginName}" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" horizontalCenter="-285" top="2"/>
+		</mx:Canvas>
+		<mx:Canvas id="update" width="100%" height="100%">
+			<mx:Form width="100%" height="80%" id="PeriodsForm">
+				<mx:FormItem label="ListOrder:" id="ListOrder_form">
+					<mx:TextInput id="ListOrderCol" text=""/>
+				</mx:FormItem>
+				<mx:FormItem label="Visible:" id="Visible_form">
+					<mx:TextInput id="VisibleCol" text=""/>
+				</mx:FormItem>
+				<mx:FormItem label="Period:" id="Period_form">
+					<mx:TextInput id="PeriodCol" text=""/>
+				</mx:FormItem>
+				<mx:FormItem label="Code:" id="Code_form">
+					<mx:TextInput id="CodeCol" text=""/>
+				</mx:FormItem>
+				<mx:FormItem label="SubPeriod:" id="SubPeriod_form">
+					<mx:TextInput id="SubPeriodCol" text=""/>
+				</mx:FormItem>
+			</mx:Form>
+			<mx:Button label="Save" id="btnSubmit" click="insertItem()" right="81" bottom="10"/>
+			<mx:Button label="Cancel" id="btnCancel" click="goToHome()" right="10" bottom="10"/>
+		</mx:Canvas>
+		<mx:Canvas id="instructions" width="100%" height="100%">
+			<mx:TextArea id="Instructions" width="600" top="50" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15" verticalScrollPolicy="auto" text="Periods used in the excavation are set by the Dig Director and System Design Staff only. &#xd;&#xd;This privilege can not be delegated.&#xd;&#xd;Directors select the periods to be used and the order in which they appear on the choice lists.&#xd;&#xd;Clicking on Hidden or  Visible toggles the value, order is a data entered number with gaps to begin with.&#xd;&#xd;">
+			</mx:TextArea>
+			<mx:Button label="Open Source" horizontalCenter="285" top="20" id="sourceButton" click="sourceButton_clickHandler(event)" width="100"/>
+			<mx:Button id="homeButton" width="100" label="Home"  click="goToHome()" tabIndex="1" toolTip="Instructions for the Use of this Screen"  horizontalCenter="-285" top="20"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+</mx:Application>

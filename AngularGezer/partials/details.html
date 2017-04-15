@@ -1,0 +1,18 @@
+<section class="artifactinfo">
+  <div class="artifact cf" ng-model="artifacts">
+    <a href="#/details/{{prevItem}}" class="btn btn-left">&lt;</a>
+    <a href="#/details/{{nextItem}}" class="btn btn-right">&gt;</a>
+
+    <h1>{{artifact.Name}}</h1>  <h1>{{artifacts[whichItem].Id}}</h1>
+    <div class="info">
+      <h1>{{artifacts[whichItem].Square}}  {{artifacts[whichItem].Locus}}  {{artifacts[whichItem].Basket}}</h1>
+<!--       <img ng-src="images/{{artifacts[whichItem].Name}}.jpg" alt="Photo of {{artifacts[whichItem].Name}}"> -->
+      <h2>{{artifacts[whichItem].Description}}  {{artifacts[whichItem].Comments}}</h2>
+    </div>
+    
+  </div>
+  <div style="width:300px;">
+  <a href="#/list" style="display:block">&laquo; Back to search</a>
+  </div>
+  
+</section>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"  width="170"  verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	includeInLayout="false" backgroundColor="#FFFFFF" backgroundAlpha="1" creationComplete="init()" toolTip="Click on Photo to Enlarge">	
+<mx:Script>
+	<![CDATA[
+	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;	
+	[Bindable]private var theLabel:String = "";
+	private function clickHandler():void{
+		parentDocument.home.selectedIndex = 1;	
+		parentDocument.selectedPhoto = "../images/" + data.FolderNameCol + "/000Pic/" + data.FileNameCol;
+		//parentDocument.photoId = data.IdCol;
+		parentDocument.photoName = data.NameCol;
+		parentDocument.photoField = data.FieldCol;
+		parentDocument.photoSquare = data.SquareCol;
+		parentDocument.photoLocus = data.LocusCol;
+		parentDocument.photoBasket = data.BasketCol;
+		parentDocument.photoDescription = data.DescriptionCol;
+		parentDocument.photoComments = data.CommentsCol;
+		parentDocument.photoCategory = data.CategoryCol;
+		parentDocument.photoCreateDate = data.DFCCol;
+	
+	}
+		private function init():void
+		{
+		
+		}
+		
+	
+	]]>
+</mx:Script>
+	<mx:Image source="../images/{data.FolderNameCol}/000Tmb/{data.FileNameCol}" click="clickHandler()"  horizontalAlign="center" height="{data.ThumbCol}" />	
+	<mx:Label text="{data.NameCol}" textAlign="center" width="200"  />
+</mx:VBox>

@@ -1,0 +1,328 @@
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" pageTitle="Demo" 
+				creationComplete="initApp()" backgroundGradientColors="[#54BAF5, #FFFFFF]" backgroundGradientAlphas="[1.0, 1.0]" 
+				themeColor="#FFFFFF"  viewSourceURL="srcview/index.html">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.DropdownEvent;
+			protected var theMessage:String = "You must first Log In by Selecting your User Name and Entering your Password at the Top Right. View_Only provides read only access if available.";
+			protected function centerButton_clickHandler(event:MouseEvent):void
+			{
+				if(loginStatus != "Success"){
+					Alert.show("You must first Log In by Selecting your User Name and Entering your Password at the Top Right. View_Only provides read only access if available.");
+				} else {
+					navigateToURL(new URLRequest('../center/'), '_self' );	
+				}
+			
+			}
+		
+			protected function checkinButton_clickHandler(event:MouseEvent):void
+			{
+				if(loginStatus != "Success"){
+					Alert.show(theMessage);
+				} else {
+				navigateToURL(new URLRequest('../checkin/'), '_self');
+			}}
+
+
+			protected function readButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../readings/'), '_self');
+			}}
+
+
+			protected function cultureButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../culture/'), '_self');
+			}}
+
+
+			protected function photosButton_clickHandler(event:MouseEvent):void
+			{
+				if(loginStatus != "Success"){
+					Alert.show(theMessage);
+				} else {
+				navigateToURL(new URLRequest('../photos/'), '_self');
+			}}
+
+
+			protected function listButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../lists/'), '_self');
+			}}
+
+
+			protected function periodButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../periods/'), '_self');
+			}}
+
+
+			protected function unreadButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/R_BasketsUnread.php'), '_self');
+			}}
+
+
+			protected function staffButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/R_Usage.php'), '_self');
+			}}
+
+
+			protected function listByDayButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketDate.php'), '_self');
+			}}
+
+
+			protected function listByPeriodButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_PotteryPeriod.php'), '_self');
+			}}
+
+
+			protected function listByCultureButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/R_MCReports.php'), '_self');
+			}}
+
+
+			protected function dailyBasketCountButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/R_BasketsDaily.php'), '_self');
+			}}
+
+
+			protected function AllBasketsDetailButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/R_BasketsAll.php'), '_self');
+			}}
+
+
+			protected function AllBasketsSumButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/R_BasketsAllSum.php'), '_self');
+			}}
+
+
+			protected function SquareSummaryButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketSquareSum.php'), '_self');
+			}}
+
+
+			protected function LocusSummaryButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketLocusSum.php'), '_self');
+			}}
+
+
+			protected function SqLocusSummaryButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketLocaSum.php'), '_self');
+			}}
+
+
+			protected function SquareDetailButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show(theMessage);
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketSquare.php'), '_self');
+			}}
+
+
+			protected function LocusDetailButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketLocus.php'), '_self');
+			}}
+
+
+			protected function SqLocusDetailButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				navigateToURL(new URLRequest('../reports/RG_BasketLocaSum.php'), '_self');
+			}}
+
+			protected function usersButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				navigateToURL(new URLRequest('../staff/'), '_self');
+			}}
+
+
+			protected function fieldsButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				navigateToURL(new URLRequest('../fields/'), '_self');
+			}}
+
+			protected function squaresButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				navigateToURL(new URLRequest('../squares/'), '_self');
+			}}
+			protected function 	sqlBackup_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				navigateToURL(new URLRequest('../archaeodemodata.sql'), '_self');
+			}}
+			protected function controlPanel_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				Alert.show("Each Excavation gets it own Full Function PhpMyAdmin Control Panel with its own MySql Database");
+			}}
+			protected function reportsDownloadButton_clickHandler(event:MouseEvent):void
+			{	if(loginStatus != "Success"){
+				Alert.show("Please Log in");
+			} else {
+				visitorDownLoad();
+				navigateToURL(new URLRequest('../ArchaeoLibrary_r0.99.1.zip'), '_self');
+			}}
+
+
+			protected function usersPop_closeHandler(event:DropdownEvent):void
+			{
+				if(usersPop.selectedLabel == "View_Only"){
+					Alert.show("Welcome to ArchaeoLibrary");
+					loginButton_clickHandler();
+				}
+			}
+
+			protected function mailListButton_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest('http://tech.groups.yahoo.com/group/AsorTech/'), '_self');
+			}
+
+		]]>
+	</mx:Script>
+
+	<mx:Script source="LoginScript.as" />
+	<mx:Script source="DemoScript.as" />
+
+	<mx:ViewStack id="applicationScreens" width="1024" height="100%" >
+		<mx:Canvas id="home"  height="100%" width="1024">
+			<mx:Label text="User:"  fontWeight="bold" textAlign="right" top="12" right="324"/>
+			<mx:ComboBox id="usersPop" dataProvider="{usersArr}" labelField="NameCol" selectedIndex="1" width="125" top="10" close="usersPop_closeHandler(event)" right="191"/>
+			<mx:Label text="Pass"  fontWeight="bold" top="12" right="154"/>
+			<mx:TextInput id="passInput"  width="66" displayAsPassword="true" top="10" right="83"/>
+			<mx:Button id="loginButton" label="Login" click="loginButton_clickHandler()" width="52" top="12" fontSize="9" fontWeight="normal" fontStyle="italic" fontFamily="Times New Roman" right="23"/>
+			<mx:Label id="welcomeMessage" fontWeight="bold" textAlign="center" horizontalCenter="0" width="500" height="44" fontSize="14" top="188"/>
+			<mx:TextArea backgroundAlpha="0.0" width="261" height="27" text="Tel Gezer" color="#FFFFFF" textAlign="center" fontSize="18" borderStyle="none" horizontalCenter="0" top="19"/>
+			<mx:Button  label="Excavation Center" click="centerButton_clickHandler(event)" horizontalCenter="0" id="centerButton" width="270" height="121" top="54"/>
+			<mx:Button  label="Checkin"  click="checkinButton_clickHandler(event)" horizontalCenter="-225" id="checkinButton" width="150" height="50" top="257"/>
+			<mx:Button  label="Reading"  click="readButton_clickHandler(event)" horizontalCenter="-75" id="readButton" width="150" height="50" top="257"/>
+			<mx:Button  label="Culture"  click="cultureButton_clickHandler(event)" horizontalCenter="75" id="cultureButton" width="150" height="50" top="257"/>
+			<mx:Button  label="Photos"  click="photosButton_clickHandler(event)" horizontalCenter="225" id="photosButton" width="150" height="50" top="257"/>
+			<mx:Button  label="Lists"  click="listButton_clickHandler(event)" horizontalCenter="75" id="listButton" width="150" height="50" top="315"/>
+			<mx:Button  label="Periods"  click="periodButton_clickHandler(event)" horizontalCenter="225" id="periodButton" width="150" height="50" top="315"/>
+			<mx:Button  label="Fields" id="fieldsButton" click="fieldsButton_clickHandler(event)" horizontalCenter="-225" width="150" height="50" top="315" />
+			<mx:Button  label="Squares" id="squaresButton"  click="squaresButton_clickHandler(event)" horizontalCenter="-75" width="150" height="50" top="315" />
+			<mx:Button  label="List by Day"    click="listByDayButton_clickHandler(event)" horizontalCenter="150" id="listByDayButton" width="150" height="50" top="534"/>
+			<mx:Button  label="List by Period"   click="listByPeriodButton_clickHandler(event)" horizontalCenter="0" id="listByPeriodButton" width="150" height="50" top="534"/>
+			<mx:Button  label="List by Culture"  click="listByCultureButton_clickHandler(event)" horizontalCenter="-150" id="listByCultureButton" width="150" height="50" top="534"/>
+			<mx:Button  label="Daily Basket Count"   click="dailyBasketCountButton_clickHandler(event)" horizontalCenter="150" id="dailyBasketCountButton" width="150" height="50" top="388"/>
+			<mx:Button  label="All Baskets Detail"  click="AllBasketsDetailButton_clickHandler(event)" horizontalCenter="0" id="AllBasketsDetailButton" width="150" height="50" top="388"/>
+			<mx:Button  label="All Baskets Sum"  click="AllBasketsSumButton_clickHandler(event)" horizontalCenter="-150" id="AllBasketsSumButton" width="150" height="50" top="388"/>
+			<mx:Button  label="Square Summary" click="SquareSummaryButton_clickHandler(event)" horizontalCenter="150" id="SquareSummaryButton" width="150" height="50" top="436"/>
+			<mx:Button  label="Locus Summary"   click="LocusSummaryButton_clickHandler(event)" horizontalCenter="0" id="LocusSummaryButton" width="150" height="50" top="436"/>
+			<mx:Button  label="Sq-Locus Summary"   click="SqLocusSummaryButton_clickHandler(event)" horizontalCenter="-150" id="SqLocusSummaryButton" width="150" height="50" top="436"/>
+			<mx:Button  label="Square Detail"   click="SquareDetailButton_clickHandler(event)" horizontalCenter="150" id="SquareDetailButton" width="150" height="50" top="485"/>
+			<mx:Button  label="Locus Detail"   click="LocusDetailButton_clickHandler(event)" horizontalCenter="0" id="LocusDetailButton" width="150" height="50" top="485"/>
+			<mx:Button  label="Square Locus Detail"  click="SqLocusDetailButton_clickHandler(event)" horizontalCenter="-150" id="SqLocusDetailButton" width="150" height="50" top="485"/>
+			<mx:Button  label="Unread Buckets" id="unreadButton"  click="unreadButton_clickHandler(event)" horizontalCenter="-200"  width="150" height="25" top="617" />
+			<mx:Button  label="Staff Usage" id="staffButton"  click="staffButton_clickHandler(event)" horizontalCenter="0" width="150" height="25" top="617" />
+			<mx:Button  label="Users"  click="usersButton_clickHandler(event)" horizontalCenter="200" id="usersButton" width="150" height="25" top="617"/>
+			<mx:Button  label="sqlBackup"  click="sqlBackup_clickHandler(event)" horizontalCenter="200" id="backupButton" width="150" height="25" toolTip="Download your entire database and save it as a fully operational backup to CD, Your Hard Drive, wherever." top="650"/>
+			<mx:Button  label="Control Panel"   click="controlPanel_clickHandler(event)" horizontalCenter="0" id="controlPanel" width="150" height="25" toolTip="PhpMySql Admin Control Panel will full features." top="650"/>
+			<mx:Button  label="Install Download"  click="reportsDownloadButton_clickHandler(event)" horizontalCenter="-200" id="reportsDownloadButton" width="150" height="25" toolTip="A Zip file with complete instructions for downloading and hosting locally where internet access is difficult. Easy two step web reintegration of data makes post-dig data integration trivial." top="650"/>
+			<mx:Label text="ArchaeoLibrary r 0.99.2" top="40" left="23"/>
+			<mx:Label text="{loginDLC}" id="labelDLC" textAlign="right" right="24" width="150" visible="{userDetails}" top="740"/>
+			<mx:Label text="{loginDFC}" id="labelDFC" left="12" textAlign="left" visible="{userDetails}" top="740"/>
+			<mx:Label text="{loginLogons}" id="labelLogons" horizontalCenter="315" textAlign="left" width="30" visible="{userDetails}" top="740"/>
+			<mx:HBox horizontalCenter="0" textAlign="center" width="250" horizontalGap="5" borderThickness="2" borderStyle="solid" horizontalAlign="center" height="18" visible="{userDetails}" top="740">
+			<mx:Label id="labelPermsAdmin" fontSize="9" visible="{userDetails}" />
+			<mx:Label id="labelPermsAdd" fontSize="9" visible="{userDetails}" />
+			<mx:Label id="labelPermsRead" text="Read" fontSize="9" visible="{userDetails}" />
+			<mx:Label id="labelPermsMod" fontSize="9"  visible="{userDetails}" />
+			<mx:Label id="labelPermsDelete" fontSize="9" visible="{userDetails}" />
+			
+			</mx:HBox>
+			<mx:Label text="Logons :" right="215" visible="{userDetails}" top="740"/>
+			<mx:Label text="Designed by Webmaster@DanielPride.com" visible="{userDetails}" top="740" horizontalCenter="-281"/>
+			<mx:Button id="instructionsButton" label="Instructions" top="12" left="23" click="goToInstructions()"/>
+			
+	
+		</mx:Canvas>
+		<mx:Canvas id="instructions" width="1024" height="100%">
+			<mx:Button label="Done" width="100" click="goToHome()" top="12" id="button1" left="23"/>
+			<mx:TextArea  horizontalCenter="0" width="924" top="50" bottom="50" fontSize="14" paddingBottom="15" paddingLeft="50" paddingRight="50" paddingTop="25" id="textarea1">
+				<mx:text><![CDATA[ArchaeoLibrary is an open source application designed for ASOR Dig Directors and Archaeologists who need to manage, publish and study archaeological excavations. It is provided free of charge. It is open source and can be modified if desired by any competent software analyst familar with Adobe Flex 3.0/Actionscript 3.0/Php 4.0/ MySQL 5.3/html 4.0 and Css.  Source code is freely available via the "Open Source" buttons which appear on each instructions page. Modifications of General interest can also be requested and may or may not show up in future releases. Donations for support are accepted but not required. All donations will be used to expand the application into the exciting new realms which digital technology is taking us. Paid clerical assistance is provided by a trained independent third party at very cheap rates for those excavations with multiple years of past data entry or large volumes of scanning who desire outside assistance.
+
+ArchaeoLibrary will run as a local app on your Desktop, as a Local Area Network (LAN) application for remote excavations, or over the world wide web on any Mamp or Lamp server. ArchaeoLibrary software can handle hundreds of simultaneous users over the World wide web. The software system easily provides volunteers  view only accounts and thus a very instructive opportunity to examine the results of their digging as they are doing it, or years later.
+
+The application is configurable for the classification systems used in the excavation via the _Setup.php file found in the includes folder at the web root. Simply follow the instructions on the simple text page (_Setup.php) and type in the appropriate values for your excavation.
+
+Free Hosting is provided on the World Wide Web at ArchaeoLibrary.com. University's can also host on their own however free tech support and setup assistance is provided if you host on the ArchaeoLibrary Server.
+
+To install ArchaeoLibrary on your Desktop or a LAN or University Server:
+
+1) install the latest version of MAMP or LAMP, freely available on the web.
+2) Download the source files from the home page, expand them, and copy them to the root directory.
+3) Type in the proper values on the _Setup.php file found in the includes folder.
+4) Launch your web browser, type in http://localhost/. You should then see the Home/Login page.5) Bookmart the Page in your web browser.
+6) Log in as View Only, go to the Users page and click the "Setup Director" button which will setup the director account with the _Setup.php values.
+7) Re-logon with the Director account and follow the instructions on each page to set up the User Accounts, and Period, List, Field and Square values.
+
+Note; Global values such as period classifications used, various list choices, user account setup and passwords etc are modifiable only with the Director account.
+
+Should you have any difficulty simply contact webmaster@archaeolibrary.com. Please forward development requests to webmaster@danielpride.com. Donations to support future development are also accepted by paypal at webmaster@danielpride.com. Paid clerical support is available via support@archaeoLibrary.com. Discussions of this software are via the ASOR Tech group at yahoo at http://tech.groups.yahoo.com/group/AsorTech/
+
+Check the home page at ArchaeoLibrary.com and the version number at the top left periodically for Upgrades and Maintenance releases if you are hosting locally or remotely. Accounts hosted on Archaeolibrary.com will be automatically upgraded as new versions are released.
+]]></mx:text>
+			</mx:TextArea>
+			<mx:Button label="Open Source" top="12" click="sourceButton_clickHandler(event)" id="SourceButton" right="23"/>
+			<mx:Button id="mailListButton" label="ASOR Tech"  horizontalCenter="0" top="12" click="mailListButton_clickHandler(event)"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+			
+</mx:Application>

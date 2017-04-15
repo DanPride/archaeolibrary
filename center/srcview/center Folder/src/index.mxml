@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:comp="Components.*"
+				backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#54BAF5, #FFFFFF]"
+				creationComplete="initApp()" layout="absolute" pageTitle="Center"
+				themeColor="#FFFFFF" viewSourceURL="srcview/index.html">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.events.ListEvent;
+			[Bindable]public var theMode:String = "Nav";
+			public function linkButton_clickHandler(event:MouseEvent):void
+			{
+				theMode = "Link";
+				goToLibraryGrid();
+			}
+
+			protected function LocaM_InclusionsCombo_changeHandler(event:ListEvent):void
+			{
+				var theInclusion:String = LocaM_InclusionsCombo.selectedLabel;
+				var theData:String = LocaM_InclusionsCombo.selectedItem.data;
+				/*
+				if("theData and theInclusion are in the Array"){
+					"Delete the Data" 
+				} else {
+					"Add the Data" 	
+					}
+				}*/
+				Alert.show("Add " + theInclusion + "?");
+				Alert.show(theData);
+			
+			}
+			import flash.events.Event;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			import mx.rpc.AsyncToken;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.http.HTTPService;
+			import flash.net.navigateToURL;
+			import flash.net.URLRequest;
+		]]>
+	</mx:Script>
+
+	<mx:Script source="LoginScript.as" /> 
+	<mx:Script source="CenterScript.as" />  
+	<mx:Script source="GPSScript.as" /> 
+	<mx:Script source="SquareScript.as" />  
+	<mx:Script source="LocaScript.as" /> 
+	<mx:Script source="LocusScript.as" />
+	<mx:Script source="BasketScript.as" /> 
+	<mx:Script source="ObjectScript.as" />  
+	<mx:Script source="PhotoScript.as" />  
+	<mx:Script source="PeriodScript.as" />
+	<mx:DateFormatter id="df" formatString="EEE,DD/MM/YYYY J:NN"/>
+	<mx:ViewStack id="home" width="1024" height="100%" horizontalCenter="0" visible="{theVisible}">
+		<mx:Canvas id="view" width="1024" height="100%" backgroundColor="#F5F8F9" borderColor="#529CC2" backgroundAlpha="0.44" themeColor="#F8FBFD">		
+			<mx:Label text="{loginName}" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" x="23" y="-1"/>
+			<mx:Label x="315" text="{permsAdmin}" id="labelPermsAdmin0" bottom="20"/>
+			<mx:Label x="402" text="{permsAdd}" id="labelPermsAdd0" bottom="20"/>
+			<mx:Label x="474.5" text="{permsMod}" id="labelPermsMod0" bottom="20"/>
+			<mx:Label x="569" text="{permsDelete}" id="labelPermsDelete0" bottom="20"/>
+			
+			<mx:Button id="DisplayInstructions" width="100" label="Instructions"  click="goToInstructions()" tabIndex="1" toolTip="Instructions for the Use of this Screen"  left="23" top="21"/>
+			<mx:ComboBox id="squareDefPop" x="138" y="21" width="100"  close="fillSquares()"  dataProvider="{arrSquareStatus}"  tabIndex="2" toolTip="Define the Squares List"/>
+			<mx:ComboBox id="searchType" x="253" y="21" width="100" rowCount="14" close="closeSearchType(event)" dataProvider="{arrSearchType}"  toolTip="List only the Objects of the Type Selected Here."/>
+			<mx:ComboBox id="searchPeriod" x="368" y="21" width="100" dataProvider="{arrPeriodPop}" labelField="CodeCol" close="closeSearchPeriod(event)"  rowCount="25" toolTip="List only the Objects for the Period Selected Here" themeColor="#009DFF"/>
+			<mx:ComboBox id="searchDef" x="483" y="21" width="100" dataProvider="{arrSearchDef}" close="closeSearchDef(event)"   toolTip="Select the Field to Search"/>
+			<mx:TextInput id="filterTxt"  x="598" y="21" width="120" toolTip="Enter the Search Term"  textAlign="center"/>
+			<mx:Button id="filterButton" x="726" y="21" width="50" click="buttonLocus()"  icon="@Embed('icons/SearchRecord.png')" toolTip="Search the Selected Field by the Term Entered" />
+			<mx:ComboBox id="photoDefPop"  dataProvider="{arrPhotoDef}" close="closePhotoDefPop(event)" x="786" y="21" width="85" rowCount="10" textAlign="center"  toolTip="Select the Class of Photos to Display for the Screen Definition" themeColor="#009DFF" fontSize="10"/>
+			<mx:ComboBox  id="photoDisplayNumPop" dataProvider="{photoDisplayNumArr}" labelField="label" close="closePhotoNum(event)" y="21" width="58" toolTip="Photo list defaults to 25 photos for the item selected&#13;this can be extended by this popup.&#13;Photo List presents all photos for item selected.&#13;Squares have hundreds.&#13;Baskets have dozens&#13;Objects often have only one." fontSize="10" right="87"/>
+			<mx:Button id="buttonHome" y="21" label="Home"  click="buttonHome_clickHandler(event)" width="59" toolTip="Return to the Home Screen" right="22"/>
+			<mx:DataGrid id="squaresGrid"  change="selectSquare()" itemClick="selectSquare()"  doubleClickEnabled="true" doubleClick="editSquare()" 
+						 dataProvider="{squaresDataArr}" x="23" y="53"  themeColor="#009DFF" rowCount="14" width="215" height="296" tabIndex="4" toolTip="Click Once to View the Elements of Square &#13;Click Twice to View the Square Data.&#13;Click once to select, then Try Up and Down Arrow!&#13;Click Header to Sort List" >			
+				<mx:columns>
+					<mx:DataGridColumn headerText="Square" width="50"  textAlign="left" dataField="NameCol" />
+					<mx:DataGridColumn headerText="Name" width="{squareNameLength}"  textAlign="center" dataField="SquareCol" />
+					<mx:DataGridColumn headerText="Supervisor" textAlign="left" dataField="SupervisorCol" />
+				</mx:columns>
+			</mx:DataGrid>
+			
+			
+	
+			<mx:DataGrid id="locaGrid" dataProvider="{locaDataArr}"  doubleClickEnabled="true"  doubleClick="editLoca(event);"
+						 change="selectLoca()" itemClick="selectLoca()" x="251" y="53"  themeColor="#009DFF" rowCount="5" height="133" toolTip="Loci in the Square&#13;Click Once to View Locus Elements for this Square&#13;Click twice to View and Edit Locus Data for the Square.&#13;Click Once to Select, then try up and down arrow !">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Sq-Loci"  width="100"  textAlign="left" dataField="ShortNameCol" />
+					<mx:DataGridColumn headerText="Locus"  width="70"  textAlign="center" dataField="LocusCol" />
+					<mx:DataGridColumn headerText="Type"  width="90"  textAlign="center" dataField="TypeCol" />
+					<mx:DataGridColumn headerText="Quality"  width="84"  textAlign="center" dataField="QualityCol" />
+					<mx:DataGridColumn headerText="Formation"  width="90"  textAlign="center" dataField="M_FormationCol" />
+					<mx:DataGridColumn headerText="Comp"  width="90"  textAlign="center" dataField="M_CompositionCol" />
+				</mx:columns>
+			</mx:DataGrid>
+			
+			<mx:DataGrid id="basketsGrid" change="selectBaskets()" itemClick="selectBaskets()" 
+						 dataProvider="{basketsDataArr}" doubleClickEnabled="true" doubleClick="editBasket(event)"
+						 editable="false" resizableColumns="true" y="194" x="252"   themeColor="#009DFF" rowCount="6"  height="155" 
+						 toolTip="Click on the Basket to view all items in that Basket&#13;Double Click to View and Edit the Basket Record.&#13;Try the Up and Down Keyboard Keys!">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Basket"  width="100"  textAlign="left" dataField="ShortNameCol" />
+					<mx:DataGridColumn headerText="Locus"  width="70"  textAlign="center" dataField="LocusCol" />
+					<mx:DataGridColumn headerText="Basket"   width="70" textAlign="center" dataField="BasketCol" />
+					<mx:DataGridColumn headerText="Status"  width="50" dataField="StatusCol" />
+					<mx:DataGridColumn headerText="Context"  width="156" dataField="ContextCol" />
+					<mx:DataGridColumn headerText="Date"  width="77" dataField="DFCCol" labelFunction="getDateFormat"  />
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:DataGrid id="locusGrid"  change="selectLocus()" itemClick="selectLocus()" dataProvider="{locusDataArr}" 
+						 x="23" top="367" bottom="21" themeColor="#009DFF" doubleClickEnabled="true" doubleClick="editLocus()"  width="75" toolTip="Click on Locus to view Entire Locus across all Squares in which it appears.">
+				<mx:columns>	
+					<mx:DataGridColumn headerText="Loci  ."  width="60"  textAlign="left" dataField="LocusCol"/>
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:DataGrid id="objectsGrid" change="selectObjects()" itemClick="selectObjects()"  dataProvider="{objectsDataArr}" 
+						 x="106" top="367" bottom="21" themeColor="#009DFF"  editable="false" resizableColumns="true" 
+						 doubleClickEnabled="true" doubleClick="editObjects(event)" width="668" 
+						 toolTip="Click on the Object to View Photos of the Object&#13;Click twice to View and Edit Object data and observations.">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Objects"  width="100"  textAlign="left" dataField="ShortNameCol" />
+					<mx:DataGridColumn headerText="Locus"  width="70"  textAlign="center" dataField="LocusCol" />
+					<mx:DataGridColumn headerText="Basket"  width="70"  textAlign="center" dataField="BasketCol" />		
+					<mx:DataGridColumn headerText="Type"  width="60"  textAlign="center" dataField="TypeCol" />
+					<mx:DataGridColumn headerText="Period"  width="130"  textAlign="center" dataField="PeriodCol" />			
+					<mx:DataGridColumn headerText="Description" width="192"  textAlign="center" dataField="DescriptionCol" />
+				</mx:columns>
+			</mx:DataGrid>			
+			
+			<mx:List id="photosDataGrid" x="787" top="54" bottom="21" width="215" variableRowHeight="true"
+					 dataProvider="{photosDataArr}"  verticalScrollPolicy="auto" horizontalScrollPolicy="off" 
+					 itemRenderer="components.photoRenderer" backgroundAlpha="0" borderStyle="none" />
+			<mx:Label x="978" y="1" text="12"/>
+			
+			<mx:DataGrid id="gpsGrid" x="787" top="54" bottom="21" width="215" dataProvider="{gpsDataArr}"   visible="false"
+						  themeColor="#009DFF"   toolTip="Click Once to View the Elements of Square &#13;Click Twice to View the Square Data.&#13;Click once to select, then Try Up and Down Arrow!&#13;Click Header to Sort List" >			
+				<mx:columns>
+					<mx:DataGridColumn headerText="X" width="60"  textAlign="center" dataField="XCol" />
+					<mx:DataGridColumn headerText="Y" width="60"  textAlign="center" dataField="YCol" />
+					<mx:DataGridColumn headerText="Z" width="40"  textAlign="center" dataField="ZCol" />
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:Button  id="newSquareButton" click="newSquare(event)"  x="216" y="54"  width="24" label="+" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+			<mx:Button  id="newLocusButton" click="newLocus()"  x="74" y="368"  width="24" label="+" paddingRight="0" paddingLeft="0" tabIndex="5"/>	
+			<mx:Button  id="newSquareLocusButton" click="newLoca(event)"  x="755" y="54"  width="24" label="+" paddingRight="0" paddingLeft="0" tabIndex="5"/>	
+			<mx:Button  id="newBasketButton" click="newBasket(event)"  x="755" y="195"  width="24" label="+" paddingRight="0" paddingLeft="0" tabIndex="5"/>	
+			<mx:Button  id="newObjectButton" click="newObject(event)"  x="750" y="368"  width="24" label="+" paddingRight="0" paddingLeft="0" tabIndex="5"/>	
+			<mx:Button  id="newPhotoButton" click="goToPhotosGrid()" color="#FF0000" fontSize="12"  x="978" y="54"  width="24" label="•" paddingRight="0" paddingLeft="0" tabIndex="5"/>	
+		</mx:Canvas>
+		<mx:Canvas id="Photo"  horizontalScrollPolicy="off" verticalScrollPolicy="on" width="1024">
+			<mx:VBox y="10" textAlign="center" horizontalAlign="center" horizontalCenter="0">
+			<mx:Image source="{selectedPhoto}" width="1024" horizontalCenter="0" click="goHome()" toolTip="Click again to Return to Center Screen." />	
+			<mx:Button id="downLoadButton" label="View Original" enabled="{permsAddValue}" click="downloadPhoto()" x="721" width="133" toolTip="Click to View and Download Original (Large File) Photo or Diagram" />
+			<mx:Label text="File: {selectedPhoto}" textAlign="center" horizontalCenter="0"  fontSize="12" toolTip=""/>	
+				<mx:HBox horizontalAlign="center" horizontalCenter="0">
+					<mx:Label text="Name: {photoName}" textAlign="center" fontSize="12"/>
+					<mx:Label text="Field: {photoField}" textAlign="center" fontSize="12"/>
+					<mx:Label text="Square: {photoSquare}" textAlign="center"  fontSize="12"/>
+					<mx:Label text="Locus: {photoLocus}" textAlign="center" fontSize="12"/>
+					<mx:Label text="Basket: {photoBasket}" textAlign="center"  fontSize="12"/>
+					<mx:Label text="Category: {photoCategory}" textAlign="center"  fontSize="12"/>
+					<mx:Label text="Date: {photoCreateDate}" textAlign="center"  fontSize="12"/>
+				</mx:HBox>
+			<mx:Label text="Description: {photoDescription}" textAlign="center" horizontalCenter="0"  width="1024" fontSize="12"/>
+			<mx:Label text="Comments: {photoComments}" textAlign="center" horizontalCenter="0"  width="1024" fontSize="12"/>
+			</mx:VBox>
+		</mx:Canvas>		
+		<mx:Canvas id="enterSquare" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="1024">							
+			<mx:Label text="Id: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" left="10" top="12" height="24"/>   
+			<mx:TextInput text="{squareId}" id="SquareIdCol" width="100" editable="false" color="#FFFFFF" fontSize="12" alpha="0.0" left="70" top="10" height="24"/>
+			<mx:Label text="Name: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="37" left="10" height="24"/>                              
+			<mx:TextInput  text="{squareName}" id="SquareNameCol" width="133" editable="false" color="#FFFFFF" fontSize="12" alpha="0.0" left="70" top="35" height="24"/>    
+			<mx:Label text="Create: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="62" left="10" height="24"/>
+			<mx:TextInput width="150" id="SquareDFCCol" text="{squareDFC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="60" height="24"/>
+			<mx:Label text="Modify: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="87" left="10" height="24"/>
+			<mx:TextInput width="125" id="SquareDLCCol" text="{squareDLC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" left="70" top="85"   height="24"/>
+			<mx:Label text="User: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="112" left="10" height="24"/>
+			<mx:TextInput width="150" id="SquareUserCol" text="{squareUser}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="110" height="24"/>
+			<mx:Label text="Field" x="306.6" y="233"  width="60" textAlign="center"/>  
+			<mx:ComboBox id="SquareFieldCol" dataProvider="{squareFieldsArr}" selectedIndex="{squareFieldIndex}" labelField="CodeCol" width="69" x="297.6" y="257"  fontSize="14" fontFamily="Arial"  themeColor="#009DFF"  tabIndex="1"/>         
+			<mx:Label text="Square" x="387.6" y="233"  width="63"/>
+			<mx:TextInput id="SquareSquareCol" text="{squareSquare}" x="387.6" y="257" width="63"  fontSize="14" tabIndex="2"   textAlign="center"/>    
+			<mx:RadioButton selected="{squareOpen}" groupName="OpenCol"   id="OpenRB" label="Open" x="645.4" y="244.65" fontSize="14" tabIndex="4"/>
+			<mx:RadioButton  selected="{squareClosed}" groupName="OpenCol" id="ClosedRB" label="Closed" x="645.4" y="266.65" height="28" width="81" fontSize="14"/>       
+			<mx:Label text="Supervisor" x="484.1" y="233"  width="136" textAlign="center"/>
+			<mx:TextInput id="SquareSupervisorCol" text="{squareSupervisor}" x="470.6" y="257" width="157"  fontSize="14" tabIndex="3"/>		
+			<mx:Button label="Save" id="saveSquareButton" enabled="{permsAddValue}" click="saveSquare()" x="527.6" y="331" width="100" fontSize="14"/>
+			<mx:Button label="Cancel" id="btnCancel" click="cancelSquare()" x="419.1" y="331" width="100" fontSize="14"/>
+			<mx:Button label="Delete" id="deleteSquareButton" enabled="{permsDeleteValue}" click="deleteSquare()" x="306.6" y="331"  width="100" fontSize="14"/>
+			<mx:List id="photosDataGrid3" x="787" top="54" bottom="21" width="215" variableRowHeight="true"
+					 dataProvider="{photosDataArr}"  verticalScrollPolicy="auto" horizontalScrollPolicy="off" 
+					 itemRenderer="components.photoRenderer" backgroundAlpha="0" borderStyle="none" />
+			<mx:ComboBox id="photoDefPop2"  dataProvider="{arrPhotoDef}" close="closePhotoDefPop(event)" width="85" rowCount="6" textAlign="center"  toolTip="Select the Class of Photos to Display for the Screen Definition" themeColor="#009DFF" fontSize="10" top="21" left="795"/>
+			<mx:ComboBox  id="photoDisplayNumPop2" dataProvider="{photoDisplayNumArr}" labelField="label" close="closePhotoNum(event)" y="21" width="58" toolTip="Photo list defaults to 25 photos for the item selected&#13;this can be extended by this popup.&#13;Photo List presents all photos for item selected.&#13;Squares have hundreds.&#13;Baskets have dozens&#13;Objects often have only one." fontSize="10" left="895"/>
+			<mx:Button  id="newPhotoButton5" click="goToPhotosGrid()" color="#FF0000" fontSize="12"  x="978" y="54"  width="24" label="•" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+		</mx:Canvas>
+		<mx:Canvas id="enterLoca" horizontalScrollPolicy="off" verticalScrollPolicy="on">
+			<mx:Text text="Square-Locus" width="150"  fontWeight="bold" fontSize="18" textAlign="center" horizontalCenter="0" top="15"/>		  
+			<mx:Label text="Id: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" left="10" top="12"/>   
+			<mx:TextInput text="{locaId}" id="LocaIdCol" width="100" editable="false" color="#FFFFFF" fontSize="12" alpha="0.0" left="70" top="10"/>
+			<mx:Label text="Name: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="37" left="10"/>                              
+			<mx:TextInput  text="{locaName}" id="LocaNameCol" width="133" editable="false" color="#FFFFFF" fontSize="12" alpha="0.0" left="70" top="35"/>    
+			<mx:Label text="First: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="62" left="10"/>
+			<mx:TextInput width="150" id="LocaDFCCol" text="{locaDFC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="60"/>
+			<mx:Label text="Last: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="87" left="10"/>
+			<mx:TextInput width="125" id="LocaDLCCol" text="{locaDLC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" left="70" top="85"  />
+			<mx:Label text="User: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="112" left="10"/>
+			<mx:TextInput width="150" id="LocaUserCol" text="{locaUser}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="110"/>
+			
+			<mx:Label text="Field" width="100" textAlign="center" color="#FFFFFF" horizontalCenter="-100" top="52"/>                              
+			<mx:TextInput  text="{locaField}" id="LocaFieldCol" width="100"  editable="false" alpha="0.0" color="#FFFFFF" fontSize="14" horizontalCenter="-100" top="69"  textAlign="center"/>
+			<mx:Label text="Square" width="100" textAlign="center" color="#FFFFFF" horizontalCenter="0" top="52"/>  
+			<mx:TextInput  text="{locaSquare}" id="LocaSquareCol" width="100"  editable="false" alpha="0.0" color="#FFFFFF" fontSize="14" horizontalCenter="0" top="70" textAlign="center"/>
+			<mx:Label text="Locus" width="100" textAlign="center" color="#FFFFFF" horizontalCenter="100" top="52"/>     
+			<mx:TextInput  text="{locaLocus}" id="LocaLocusCol" width="100"  editable="false" alpha="0.0" color="#FFFFFF" fontSize="14" horizontalCenter="100" top="70" textAlign="center"/>    
+			
+			
+			<mx:Label text="Type" width="115" textAlign="center" horizontalCenter="0" top="102"/>   			
+			<mx:Label text="Rationale" y="162" width="90" textAlign="center" horizontalCenter="0"/>        
+			<mx:TextArea  text="{locaRationale}" id="LocaRationaleCol" width="540" horizontalCenter="0"  height="59" top="180"/>		
+			<mx:Label text="Definition" y="246" width="100" textAlign="center" height="16" horizontalCenter="-3"/>  
+			<mx:TextArea  text="{locaDefinition}" id="LocaDefinitionCol" y="263" width="540" height="65" horizontalCenter="-3"		 />
+			<mx:Label text="Description" width="90" textAlign="center" horizontalCenter="0" top="332"/>  
+			<mx:TextArea  text="{locaDescription}" id="LocaDescriptionCol" y="349" width="540" horizontalCenter="0" />		
+			<mx:Label text="Interpretation" y="542" width="100" textAlign="right" horizontalCenter="0"/>  
+			<mx:TextArea  text="{locaInterpretation}" id="LocaInterpretationCol" y="560" width="540" horizontalCenter="0" />		
+			<mx:Label text="Startigraphy" y="404" width="100" textAlign="center" horizontalCenter="0"/>  
+			<mx:TextArea  text="{locaStratigraphy}" id="LocaStratigraphyCol"  y="420" width="540" horizontalCenter="0" />		
+			
+			
+			<mx:Label text="Length" width="52" textAlign="right" horizontalCenter="-133" top="105"/>
+			<mx:TextInput  text="{locaLength}" id="LocaLengthCol" width="50" fontSize="12" horizontalCenter="-133" top="122" textAlign="right"/>
+			<mx:Label text="Width" width="50" textAlign="right" horizontalCenter="-203" top="104"/>  
+			<mx:TextInput  text="{locaWidth}" id="LocaWidthCol" width="50" fontSize="12" horizontalCenter="-203" top="122" textAlign="right"/>
+			<mx:Label text="Remarks" y="609" width="100" textAlign="center" horizontalCenter="0"/>  
+			<mx:TextArea  text="{locaRemarks}" id="LocaRemarksCol" y="626" width="540" height="95" horizontalCenter="0"/>
+			
+			<mx:Label text="Method" y="203" width="100" textAlign="center" left="59"/>  	
+			<mx:ComboBox id="LocaMethodCol" dataProvider="{locaMethodArr}" rowCount="15" selectedIndex="{locaMethodIndex}" labelField="label" width="125" themeColor="#009DFF" height="22" textAlign="center" top="220" left="59"/>			
+			<mx:Label text="Quality" y="159" width="100" textAlign="center" left="59"/>  
+			<mx:ComboBox id="LocaQualityCol" dataProvider="{locaQualityArr}"  rowCount="15" selectedIndex="{locaQualityIndex}" labelField="label" width="125" themeColor="#009DFF"  height="22" textAlign="center" top="180" left="59"/>     
+			<mx:Label text="Formation" width="100" textAlign="center" top="361" left="59"/>  
+			<mx:ComboBox id="LocaM_FormationCol" dataProvider="{locaFormationArr}"  rowCount="15" selectedIndex="{locaM_FormationIndex}"  editable="false" width="125" themeColor="#009DFF" height="22" textAlign="center" top="380" left="59"/>
+			<mx:Label text="Compaction" y="242" width="100" textAlign="center" left="59"/>
+			<mx:ComboBox id="LocaM_CompactionCol" dataProvider="{locaM_CompactionArr}"  rowCount="15"  selectedIndex="{locaM_CompactionIndex}"  editable="false" width="125" themeColor="#009DFF" height="22" textAlign="center" top="260" left="59"/>
+			<mx:Label text="M_Type" width="100" textAlign="center" fontSize="10" top="322" left="59"/>  
+			<mx:ComboBox id="LocaM_TypeCol" dataProvider="{locaM_TypeArr}" selectedIndex="{locaM_TypeIndex}"  rowCount="15"   editable="false" width="125" themeColor="#009DFF" height="22" textAlign="center" top="340" left="59"/>
+			<mx:Label text="Composition" width="100" textAlign="center" top="282" left="59"/>  
+			<mx:ComboBox id="LocaM_CompositionCol" dataProvider="{locaM_CompositionArr}" selectedIndex="{locaM_CompositionIndex}"   rowCount="15" editable="false" width="125" themeColor="#009DFF" height="22" textAlign="center" top="300" left="59"/>
+			
+			<mx:Label id="LocaM_InclusionsText" text="Select Incusion" width="100" textAlign="center" top="404" left="59"/>  
+			<mx:ComboBox id="LocaM_InclusionsCombo" dataProvider="{inclusionsArray}" change="LocaM_InclusionsCombo_changeHandler(event)" rowCount="15" editable="false" width="125" themeColor="#009DFF" height="22" textAlign="center" top="420" left="59" toolTip="Select Inclusion to Add or Delete." />
+		<!--	// borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0"   top="247"/>-->
+			<mx:DataGrid width="125" id="inclusionsGrid" dataProvider="{inclusionsDataArray}"  backgroundAlpha="1.0" color="#000000" columnWidth="100" cornerRadius="15" backgroundColor="#54BAF5" editable="false" enabled="true" themeColor="#307BAB" alpha="1.0" rowCount="5" left="59" top="450" borderThickness="0" headerHeight="1">
+				<mx:columns>
+					<mx:DataGridColumn fontSize="10" dataField="label"  backgroundColor="#54BAF5" fontWeight="bold" textAlign="center"/>
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:Label text="Color" x="19" y="658" width="66" textAlign="right"/>  
+			<mx:TextInput  text="{locaM_Color}" id="LocaM_ColorCol" x="88" y="656" width="100"/>
+			<mx:Label text="QualCom" x="10" y="718" width="61" textAlign="right"/>  
+			<mx:TextInput  text="{locaQualCom}" id="LocaQualComCol" x="88" y="716" width="100"/>
+			<mx:RadioButton selected="{locaSieved}" groupName="SievedCol"   id="SievedRB" label="Sieved" fontSize="12" tabIndex="4" width="66" horizontalCenter="125" top="121"/>
+			<mx:RadioButton selected="{locaNotSieved}" groupName="SievedCol" id="NotSievedRB" label="Not Sieved" height="28" width="100" fontSize="12" horizontalCenter="213" top="119"/>  
+			
+			<mx:Button id="saveLocaButton"  enabled="{permsAddValue}"  y="730" label="Save" click="locaSaveButton_clickHandler(event)" width="100" horizontalCenter="150"	/>
+			<mx:Button label="Cancel" click="cancelLoca()" horizontalCenter="0" top="730" width="100"	/>		
+			<mx:Button y="729" label="Delete" enabled="{permsDeleteValue}" click="deleteLoca()" id="deleteLocaButton" width="100" horizontalCenter="-150"		/>
+			<mx:TextInput text="{locaType}" id="LocaTypeCol" click="showTypeMenu();" width="115" textAlign="center" fontWeight="bold" editable="false" horizontalCenter="0" top="119" fontSize="14"/>
+																														   
+			<mx:Label text="Relationships" y="473" width="100" textAlign="right" horizontalCenter="0"/>
+			<mx:TextArea  text="{locaRelationships}" id="LocaRelationshipsCol" y="491" width="540" height="46" horizontalCenter="0"	/>		
+		<mx:List id="photosDataGrid2" top="54" bottom="21" width="215" variableRowHeight="true"
+					 dataProvider="{photosDataArr}"  verticalScrollPolicy="auto" horizontalScrollPolicy="off" 
+					 itemRenderer="components.photoRenderer" backgroundAlpha="0" borderStyle="none" left="787"/>
+		<mx:ComboBox id="photoDefPop3"  dataProvider="{arrPhotoDef}" close="closePhotoDefPop(event)" width="85" rowCount="6" textAlign="center"  toolTip="Select the Class of Photos to Display for the Screen Definition" themeColor="#009DFF" fontSize="10" top="21" left="795"/>
+		<mx:ComboBox  id="photoDisplayNumPop3" dataProvider="{photoDisplayNumArr}" labelField="label" close="closePhotoNum(event)" y="21" width="58" toolTip="Photo list defaults to 25 photos for the item selected&#13;this can be extended by this popup.&#13;Photo List presents all photos for item selected.&#13;Squares have hundreds.&#13;Baskets have dozens&#13;Objects often have only one." fontSize="10" left="895"/>
+		<mx:Label text="x" textAlign="center" fontWeight="bold" horizontalCenter="-168" top="124"/>
+		<mx:Button  id="newPhotoButton4" click="goToPhotosGrid()" color="#FF0000" fontSize="12"  x="978" y="54"  width="24" label="•" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+		
+		
+			</mx:Canvas>
+		<mx:Canvas id="enterLocus" horizontalScrollPolicy="off" verticalScrollPolicy="on">
+			<mx:Text y="19" text="Locus" width="150"  fontWeight="bold" fontSize="18" textAlign="center" horizontalCenter="0"/>		  
+			<mx:Label text="Id: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" left="10" top="12"/>   
+			<mx:TextInput text="{locusId}" id="LocusIdCol" width="100" editable="false" color="#FFFFFF" fontSize="12" alpha="0.0" left="70" top="10"/>
+			<mx:Label text="Name: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="37" left="10"/>                              
+			<mx:TextInput  text="{locusName}" id="LocusNameCol" width="133" editable="false" color="#FFFFFF" fontSize="12" alpha="0.0" left="70" top="35"/>    
+			<mx:Label text="First: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="62" left="10"/>
+			<mx:TextInput width="150" id="LocusDFCCol" text="{locusDFC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="60"/>
+			<mx:Label text="Last: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="87" left="10"/>
+			<mx:TextInput width="125" id="LocusDLCCol" text="{locusDLC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" left="70" top="85"  />
+			<mx:Label text="User: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="112" left="10"/>
+			<mx:TextInput width="150" id="LocusUserCol" text="{locusUser}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="110"/>
+			
+			
+			<mx:Button y="484" label="Return" click="goHome()" horizontalCenter="0"/>
+			<mx:List id="photosDataGrid5" x="787" top="54" bottom="21" width="215" variableRowHeight="true"
+					 dataProvider="{photosDataArr}"  verticalScrollPolicy="auto" horizontalScrollPolicy="off" 
+					 itemRenderer="components.photoRenderer" backgroundAlpha="0" borderStyle="none" />
+			<mx:ComboBox id="photoDefPop4"  dataProvider="{arrPhotoDef}" close="closePhotoDefPop(event)" width="85" rowCount="6" textAlign="center"  toolTip="Select the Class of Photos to Display for the Screen Definition" themeColor="#009DFF" fontSize="10" top="21" left="795"/>
+			<mx:ComboBox  id="photoDisplayNumPop4" dataProvider="{photoDisplayNumArr}" labelField="label" close="closePhotoNum(event)" y="21" width="58" toolTip="Photo list defaults to 25 photos for the item selected&#13;this can be extended by this popup.&#13;Photo List presents all photos for item selected.&#13;Squares have hundreds.&#13;Baskets have dozens&#13;Objects often have only one." fontSize="10" left="895"/>
+			<mx:Button  id="newPhotoButton3" click="goToPhotosGrid()" color="#FF0000" fontSize="12"  x="978" y="54"  width="24" label="•" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+			<mx:Label text="User: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="112" left="10"/>
+			<mx:TextInput width="150" id="LocusUserCol0" text="{locusUser}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12"  left="70" top="110"/>
+		</mx:Canvas>
+		<mx:Canvas id="enterBasket" horizontalScrollPolicy="off" verticalScrollPolicy="on">
+			<mx:Label text="Id: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="12" left="10"/>  
+			<mx:TextInput id="BasketIdCol" width="150" text="{basketId}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="10" left="87"/>
+			<mx:Label text="DFC: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="37" left="10"/>  
+			<mx:TextInput width="150" id="BasketDFCCol" text="{basketDFC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="35" left="87"/>
+			<mx:Label text="DLC: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="62" left="10"/>  
+			<mx:TextInput width="150" id="BasketDLCCol" text="{basketDLC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="60" left="87"/>
+			<mx:Label text="User: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" left="10" top="87"/>  
+			<mx:TextInput width="150" id="BasketUserCol" text="{basketUser}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="85" left="87"/>
+			<mx:Label text="Name: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="112" left="10"/>  
+			<mx:TextInput width="150" id="BasketNameCol" text="{basketName}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="110" left="87"/>
+			<mx:Label text="Storage" width="60" textAlign="right"  color="#FFFFFF" fontSize="12" left="10" top="137"/>  
+			<mx:TextInput width="150" id="BasketDispositionCol" text="{basketDisposition}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="135" left="87"/>
+			<mx:Label text="Status" width="60" textAlign="right"  color="#FFFFFF" fontSize="12" top="162" left="10"/>  
+			<mx:TextInput  width="150" id="BasketStatusCol" text="{basketStatus}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="160" left="87"/>
+			<mx:Label text="Field" width="49" textAlign="center" fontSize="14" horizontalCenter="-150" top="70" color="#FFFFFF" />  
+			<mx:TextInput width="49" id="BasketFieldCol" text="{basketField}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="-150"/>
+			<mx:Label text="Square" width="100" textAlign="center" fontSize="14" horizontalCenter="-50" top="70" color="#FFFFFF"/>  
+			<mx:TextInput width="100" id="BasketSquareCol" text="{basketSquare}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="-50"/>
+			<mx:Label text="Locus" width="100" textAlign="center" fontSize="14" horizontalCenter="50" top="70" color="#FFFFFF"/>  
+			<mx:TextInput width="100" id="BasketLocusCol" text="{basketLocus}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" horizontalCenter="50" top="95"/>
+			<mx:Label text="Basket" width="100" textAlign="center" fontSize="14" horizontalCenter="150" top="70" color="#FFFFFF"/>  
+			<mx:TextInput width="100" id="BasketBasketCol" text="{basketBasket}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="150"/>
+			
+			<mx:Label text="Period" y="114" width="200" textAlign="center" fontSize="10" horizontalCenter="0" fontWeight="normal"/>  
+			<mx:TextInput y="133" width="200" id="BasketPeriodsCol" text="{basketPeriods}" fontSize="14" textAlign="center" horizontalCenter="0"/>
+			<mx:Label text="Comments" x="240.75" width="542.5" textAlign="center" fontSize="10" top="175"/>  
+			<mx:TextInput width="540" id="BasketContextCol" text="{basketContext}" fontSize="14" textAlign="center" height="360" horizontalCenter="0" top="190"/>
+		     	
+			<mx:Text  horizontalCenter="0" text="Basket" width="100" height="30" fontWeight="bold" fontSize="18" textAlign="center" top="23"/>
+			<mx:Button label="Save"  enabled="{permsAddValue}"  click="saveBasket()" fontSize="14" width="100" id="saveBasketButton" top="575" horizontalCenter="150"/>
+			<mx:Button label="Cancel" click="cancelBasket()" fontSize="14" width="100" horizontalCenter="0" top="575"/>
+			<mx:Button label="Delete" enabled="{permsDeleteValue}" click="deleteBasket()" fontSize="14" width="100" id="deleteBasketButton" horizontalCenter="-150" top="575"/>
+			<mx:List id="photosDataGrid1" x="787" top="54" bottom="21" width="215" variableRowHeight="true"
+					 dataProvider="{photosDataArr}"  verticalScrollPolicy="auto" horizontalScrollPolicy="off" 
+					 itemRenderer="components.photoRenderer" backgroundAlpha="0" borderStyle="none" />
+			<mx:ComboBox id="photoDefPop1"  dataProvider="{arrPhotoDef}" close="closePhotoDefPop(event)" width="85" rowCount="6" textAlign="center"  toolTip="Select the Class of Photos to Display for the Screen Definition" themeColor="#009DFF" fontSize="10" top="21" left="795"/>
+			<mx:ComboBox  id="photoDisplayNumPop1" dataProvider="{photoDisplayNumArr}" labelField="label" close="closePhotoNum(event)" y="21" width="58" toolTip="Photo list defaults to 25 photos for the item selected&#13;this can be extended by this popup.&#13;Photo List presents all photos for item selected.&#13;Squares have hundreds.&#13;Baskets have dozens&#13;Objects often have only one." fontSize="10" left="895"/>
+			<mx:Button  id="newPhotoButton2" click="goToPhotosGrid()" color="#FF0000" fontSize="12"  x="978" y="54"  width="24" label="•" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+		</mx:Canvas>
+
+		<mx:Canvas id="enterObject" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="1024">
+			<mx:Label  text="Id: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="12" left="10"/>
+			<mx:TextInput width="150" id="ObjectIdCol" text="{objectId}"  editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="10" left="70"/>    
+			<mx:Label text="Name: "  width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="37" left="10"/>
+			<mx:TextInput  width="150" id="ObjectNameCol" text="{objectName}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="35" left="70"/>
+			<mx:Label text="First" width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="62" left="10"/>
+			<mx:TextInput width="150" id="ObjectDFCCol" text="{objectDFC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="60" left="70"/>
+			<mx:Label text="Last" width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="87" left="10"/>
+			<mx:TextInput width="150" id="ObjectDLCCol" text="{objectDLC}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="85" left="70"/>
+			<mx:Label text="User: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="112" left="10"/>
+			<mx:TextInput width="150" id="ObjectUserCol" text="{objectUser}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="110" left="70"/>
+			<mx:Label text="Storage: " width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="137" left="10"/>
+			<mx:TextInput  width="150" id="ObjectDispositionCol" text="{objectDisposition}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="135" left="70"/>
+			<mx:Label  text="Type: "  width="60" textAlign="right" color="#FFFFFF" fontSize="12" top="162" left="10"/>
+			<mx:TextInput  width="150" id="ObjectTypeCol" text="{objectType}" editable="false" alpha="0.0" color="#FFFFFF" fontSize="12" top="160" left="70"/>
+			
+			<mx:Label text="Field" width="50"  textAlign="center" fontSize="14" horizontalCenter="-150" top="70" color="#FFFFFF" />  
+			<mx:TextInput width="50" id="ObjectFieldCol" text="{objectField}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="-150"/>
+			<mx:Label text="Square"  width="100"  textAlign="center"  fontSize="14" horizontalCenter="-50" top="70" color="#FFFFFF"/> 
+			<mx:TextInput  width="100" id="ObjectSquareCol" text="{objectSquare}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="-50"/>
+			<mx:Label text="Locus" width="100"  textAlign="center"  fontSize="14" horizontalCenter="50" top="70" color="#FFFFFF"/>  
+			<mx:TextInput width="100" id="ObjectLocusCol" text="{objectLocus}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="50"/>
+			<mx:Label text="Basket" width="100"  textAlign="center" fontSize="14" horizontalCenter="150" top="70" color="#FFFFFF"/>  
+			<mx:TextInput  width="100" id="ObjectBasketCol" text="{objectBasket}" fontSize="14" textAlign="center" editable="false" alpha="0.0" color="#FFFFFF" top="95" horizontalCenter="150"/>
+			<mx:Label width="200" text="Period" textAlign="center" horizontalCenter="0" top="130"/> 
+			<mx:TextInput  width="200" id="ObjectPeriodCol" text="{objectPeriod}" textAlign="center" fontSize="14" horizontalCenter="0" top="147"/>
+			<mx:Label width="50" text="Quan" textAlign="center" horizontalCenter="175" verticalCenter="-175"/> 
+			<mx:TextInput width="50" id="ObjectQuantityCol" text="{objectQuantity}" textAlign="center" fontSize="14" top="168" horizontalCenter="175"/>
+			<mx:Label width="50" text="Saved" textAlign="center" horizontalCenter="245" verticalCenter="-175"/> 
+			<mx:TextInput width="50" id="ObjectSavedCol" text="{objectSaved}" textAlign="center" fontSize="14" horizontalCenter="245" top="168"/>
+			<mx:Label width="200" text="Description" textAlign="center" horizontalCenter="0" top="181"/> 
+			<mx:TextArea width="540" id="ObjectDescriptionCol" text="{objectDescription}" textAlign="center" height="185" horizontalCenter="0" top="200"/>
+			<mx:Label y="400" width="529" text="Comments" textAlign="center" horizontalCenter="0"/> 
+			<mx:TextArea width="540" id="ObjectCommentsCol" text="{objectComments}" textAlign="center" height="94" horizontalCenter="0" top="426"/>
+			<mx:Text text="Objects" width="200" height="30" fontWeight="bold" fontSize="18" textAlign="center" horizontalCenter="0" top="20"/>
+			<mx:Button label="Save"  enabled="{permsAddValue}"  click="saveObject()" width="93" id="saveObjectsButton" top="550" horizontalCenter="150"/>
+			<mx:Button label="Cancel" click="cancelObject()" width="100" top="550" horizontalCenter="0"/>
+			<mx:Button label="Delete" enabled="{permsDeleteValue}" click="deleteObject()" width="93" id="deleteObjectsButton" top="550" horizontalCenter="-150"/>
+			<mx:List id="photosDataGrid0" x="785" top="54" bottom="21" width="215" variableRowHeight="true"
+					 dataProvider="{photosDataArr}"  verticalScrollPolicy="auto" horizontalScrollPolicy="off" 
+					 itemRenderer="components.photoRenderer" backgroundAlpha="0" borderStyle="none" />
+			<mx:ComboBox id="photoDefPop0"  dataProvider="{arrPhotoDef}" close="closePhotoDefPop(event)" width="85" rowCount="6" textAlign="center"  toolTip="Select the Class of Photos to Display for the Screen Definition" themeColor="#009DFF" fontSize="10" top="21" left="795"/>
+			<mx:ComboBox  id="photoDisplayNumPop0" dataProvider="{photoDisplayNumArr}" labelField="label" close="closePhotoNum(event)" y="21" width="58" toolTip="Photo list defaults to 25 photos for the item selected&#13;this can be extended by this popup.&#13;Photo List presents all photos for item selected.&#13;Squares have hundreds.&#13;Baskets have dozens&#13;Objects often have only one." fontSize="10" left="895"/>
+			<mx:Button id="linkButton" x="395.5" y="593" label="Add Link to  Archtype Image Library" click="linkButton_clickHandler(event)" toolTip="Linking the Object to an Image will present that image just below the Object in the List."/>
+			<mx:Button  id="newPhotoButton1" click="goToPhotosGrid()" color="#FF0000" fontSize="12"  x="978" y="54"  width="24" label="•" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+		</mx:Canvas>
+		
+		<mx:Canvas id="photosGrid" width="1024" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Label text="photospread" horizontalCenter="0" verticalCenter="50"/>	
+				<mx:TileList dataProvider="{photosDataArr}" itemRenderer="components.photoRenderer" variableRowHeight="true"  paddingLeft="3" paddingRight="3"  horizontalCenter="0" width="1024" height ="100%" y="0" backgroundAlpha="0.0" borderThickness="2"  color="0x323232" columnWidth="200" maxColumns="5"/>	
+				<mx:Button  id="newPhotoButton0" click="goToHome()"  right="23" top="50"  width="24" label="•" fontSize="12" color="#FF0000" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+		</mx:Canvas>
+		<mx:Canvas id="libraryGrid" width="1024" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Label text="Library Grid" horizontalCenter="0" verticalCenter="50"/>	
+			<mx:TileList dataProvider="{photosDataArr}" itemRenderer="components.libraryRenderer"  horizontalCenter="0" width="1024" height ="100%"  y="50" backgroundAlpha="0.0" borderThickness="2"  color="0x323232" columnWidth="170" maxColumns="6"/>	
+			<mx:Button  id="newPhotoButton7" click="goToHome()"  right="23" top="50"  width="24" label="•" fontSize="12" color="#FF0000" paddingRight="0" paddingLeft="0" tabIndex="5"/>
+			<mx:ComboBox x="432" y="10" id="periodPhotoGrid0"/>
+				</mx:Canvas>
+		
+		<mx:Canvas id="instructions" width="1024" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Button id="homeButton" width="100" label="Done"  click="goToHome()" tabIndex="1" toolTip="Instructions for the Use of this Screen"  left="23" top="21"/>
+			<mx:TextArea id="Instructions" width="900" top="50" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="65" paddingRight="65" paddingTop="15" paddingBottom="15">
+				<mx:text><![CDATA[The Center Screen is a diagram of the excavation.
+
+Clicking on a Square listing at the top left will display the contents of that square and the photos and drawings of the items in it.  Using the up and down keyboard arrows will repaint the entire screen to the square highlighted. The same functionality applies to Loci, Sqaure-Loci, Baskets, and Objects.
+
+Clicking on a photo will open a larger web view of that photo with single click access to the original large format, if your password has the access. Click on the displayed image to return to the main screen.
+
+Clicking the header of any field will resort the list by that field, a second click in the header will reverse the order. Headers and Columns are expandable, simply select the separator between the headers and drag to the left or right to temporarily change the default width of any column on any screen
+
+Double clicking on any list item will open the data entry detail screen for that item. 
+
+The top center box is a list of the levels or "Loci" within each square. Clicking on a Square-Locus reduces the list below it to just buckets within that Square-Locus, and the list below that to items within those buckets. Clicking on a Bucket gives you just the objects in that bucket. 
+
+The list of photos, sketches, drawings, Staff Headshots,  Originals, GPS, etc. on the right changes to reflect the selection. Getting a list of all photos and graphics of any single given item is as simple as clicking on the item in the bottom list (objects).  Select "Originals" and you are looking at scans of the original locus sheets, displayed in response to a click. Select GPS and you are looking at GPS data for the screen selection.The Photos list doubles as a documentation display. Formal, Library, and Shard all display the dig commemorative plaque photos. But at the object level,... Formal displays the Library photo for the vessel that the shard is claimed to be, just above it, Library displays just the Library Photos only, and Shard displays just the Shards.Library photos are linked in the Object screen (double click on any Object). Links record the user who links them. Be it an offical reader, Square assistant, or housebound enthusiast in Michigan working on a Tel Aviv server. By default it displays entries by offical dig designated readers calls. The list can display a student's attempts by selecting the students name in the Popup, or a readers by selecting the readers name. The recorders name is displayed in the title bar, the Name/Id for the Object in the shard photos. This opens obvious educational uses. If two offical readers claim a shard is a different Library item then it has a redish background in all views.
+
+The Objects list at the bottom can be defined for a given period or object type using the popups at the top of the screen. A user can select "ceramic" and the wander through the dig square by square, locus by locus, or bucket by bucket,  just looking at the ceramic finds only, or just the Iron 2 pottery, etc etc
+
+The narrow Loci list on the lower left also interactively changes the selections to list the loci, but in this case it lists the entire locus across all squares.
+
+Search Capabilties are included in the popup at the top right. Selecting search by "Name" and entering "L01" (First Locus in the Square) will display the surface levels, baskets and items for the entire dig. Selecting "Basket" and entering a Basket number will display that basket and its contents. Selecting Description and then entering "loomweight" will list all loomweights in the objects panel, but in the case of Description the search is for the entire dig.
+						
+Squares can be open or closed and will show or hide in the list depending upon the setting. In the March 1, 2011 release this list will include field selection as well.
+
+Clicking the plus symbol at the top right of each screen will open a new record screen for that list (Square, Locus, Loca, Basket, or Object).
+
+Photos and graphics are processed in the photos screen to assign them to a square, Locus, Basket, Object etc along with data entry of Description and Comments. See the Photos instruction screen for details.
+
+The Name field apears throughout the database for all records. It is a sequence number assigned by the computer and it is searchable. For example GZAY10L02B03-23 means Gezer (GZ) Field A (A) Square Y10 (Y10) Second Locus Down (L02) Third Bucket (B03) the 23rd item in the Bucket (-23).  If the Square Name MinLength and MaxLength  are both set to 3 ( _Setup.php ), the Square is used in the Name i.e. GZAY10, otherwise it is numeric 3 digit i.e. GAZ001.
+
+Above the photos list appears a selection popup with the following values and functions: Formal - the primary official dig photos, Extras - those photos which are simply duplicates of the primary photos, Staff - Headshots of the staff assigned to the selected square, Informal - just what it implies. Informal allows for students and staff to submit their own folders of photos to the dig and if approved they appear here when the value is selected for the popup, All - Lists All. All Categories function in synch with the Screen Definition. Staff headshots appear only at the Square Selection level.
+
+]]></mx:text>
+			</mx:TextArea>
+			<mx:Button label="Open Source" width="100" right="21" top="23" click="sourceButton_clickHandler(event)" id="sourceButton"/>
+	</mx:Canvas>
+</mx:ViewStack>
+</mx:Application>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" pageTitle="Checkin" 
+				 creationComplete="initApp()" backgroundGradientColors="[#54BAF5, #FFFFFF]" backgroundGradientAlphas="[1.0, 1.0]" 
+				themeColor="#009DFF"  viewSourceURL="srcview/index.html">
+
+	<mx:Script source="LoginScript.as" />  
+	<mx:Script source="script.as" />  
+	<mx:StringValidator id="confirmLocusVal" source="{LocusInput}" property="text" required="true"   minLength="{locusMinLength}" maxLength="{locusMaxLength}" />
+	<mx:StringValidator id="confirmBasketVal" source="{BasketInput}" property="text" required="true" minLength="{bucketMinLength}" maxLength="{bucketMaxLength}" />
+	
+	<mx:NumberValidator id="LocusVal" source="{LocusInput}" property="text"  maxValue="{locusMaxValue}"  minValue="{locusMinValue}" 
+						triggerEvent="" requiredFieldError="Invalid Locus Number"/>  
+	<mx:NumberValidator id="BasketVal" source="{BasketInput}" property="text" maxValue="{bucketMaxValue}"  minValue="{bucketMinValue}" 
+						triggerEvent="" requiredFieldError="Invalid Bucket Number"/>   
+	
+	<mx:ViewStack id="applicationScreens" width="800" height="100%" horizontalCenter="0" visible="{theVisible}" >
+	<mx:Canvas id="home" width="100%" height="100%" backgroundColor="#F5F8F9" borderColor="#529CC2" backgroundAlpha="0.44" themeColor="#F8FBFD" >		
+		<mx:Button id="DisplayInstructions" width="100" label="Instructions"  click="goToInstructions()" tabIndex="1" toolTip="Instructions for the Use of this Screen" top="23" horizontalCenter="-300"/>
+		<mx:Label x="100" text="Field" width="100" textAlign="center" id="label5" top="65"/>
+		<mx:Label text="Square" width="100" textAlign="center" id="labelSquare" top="65" horizontalCenter="-125"/>
+		<mx:Label text="Locus" width="100" textAlign="center" id="labelLocus" top="65" horizontalCenter="0"/>
+		<mx:Label x="475" text="Bucket" width="100" textAlign="center" id="labelBucket" top="65"/>
+		<mx:Button label="Home"  click="buttonHome_clickHandler(event)" id="buttonHome" width="100" top="23" horizontalCenter="300"/>
+		<mx:ComboBox id="fieldPop" dataProvider="{fieldsArr}" labelField="CodeCol"  close="closeFieldPop(event);" width="100"
+					 fontFamily="Arial" fontSize="12" themeColor="#009DFF" textAlign="center"  toolTip="Select the Field for the Square, then select the Square." top="85" horizontalCenter="-250"/>
+		<mx:ComboBox id="squarePop" dataProvider="{squaresArr}" labelField="SquareCol" width="100"  fontFamily="Arial" fontSize="12" themeColor="#009DFF" textAlign="center" toolTip="Select the Square from the list of Open Squares for the Field." horizontalCenter="-125" top="85"/>										  
+		<mx:TextInput id="LocusInput" text="" width="100" fontSize="12" fontStyle="normal" fontWeight="bold" fontFamily="Arial" textAlign="center" toolTip="Enter a valid Locus Number" horizontalCenter="0" top="85"/>                   
+		<mx:TextInput id="BasketInput" width="100" fontSize="12" fontStyle="normal" fontWeight="bold" fontFamily="Arial" textAlign="center" toolTip="Enter a valid Basket Number." horizontalCenter="125" top="85"/>                 
+		<mx:Button label="Save" enabled="{permsAddValue}" id="saveCheckinButton" click="insertItem()"  fontFamily="Arial" fontWeight="bold" fontSize="12" width="100" horizontalCenter="250" top="85"/>         
+		<mx:DataGrid id="dataGrid" dataProvider="{dataArr}" editable="{permsAddValue}" headerRelease="setOrder(event);" color="#000000" top="125" bottom="40" horizontalCenter="0" fontSize="12" >
+			<mx:columns>
+				<mx:DataGridColumn headerText="Name"  width="120"  textAlign="left" dataField="NameCol" editable="false" />
+				<mx:DataGridColumn headerText="Field"  width="90"  textAlign="center" dataField="FieldCol" />
+				<mx:DataGridColumn headerText="Square"  width="90" textAlign="center" dataField="SquareCol" />
+				<mx:DataGridColumn headerText="Locus"  width="90" textAlign="center" dataField="LocusCol" />
+				<mx:DataGridColumn headerText="Basket" width="90" textAlign="center" dataField="BasketCol" />
+				<mx:DataGridColumn headerText="Date"  width="75" textAlign="center" dataField="CreateDateCol" labelFunction="getDateFormat" editable="false" />
+				<mx:DataGridColumn headerText="Time"  width="50" textAlign="center" dataField="CreateDateCol" labelFunction="getTimeFormat" editable="false" />
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:Button id="deleteCheckinButton" enabled="{permsDeleteValue}" click="deleteItem()" icon="@Embed('icons/DeleteRecord.png')" toolTip="Delete Record" x="661"  bottom="10"/>            
+		<mx:Label text="Pottery Basket Check In" fontWeight="bold" fontSize="14" width="236" textAlign="center" id="label1" top="28" fontFamily="Verdana" horizontalCenter="0"/>
+		<mx:Label text="{loginName}" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" top="2" horizontalCenter="-300"/>
+		<mx:Label y="2" text="{digName}" width="300" textAlign="center" fontWeight="bold" fontSize="14" horizontalCenter="0"/>
+	</mx:Canvas>			
+	<mx:Canvas id="instructions" width="100%" height="100%" backgroundColor="#F5F8F9" borderColor="#529CC2" backgroundAlpha="0.44" themeColor="#F8FBFD" >		
+		<mx:Button id="homeButton" label="Done" width="100" click="goToHome()" top="23" horizontalCenter="-300"/>
+		<mx:TextArea id="Instructions" width="600" top="60" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15" verticalScrollPolicy="auto">
+			<mx:text><![CDATA[The Checkin Screen begins the process of recording the dig.
+
+As buckets come in from the field to the pottery yard they are entered on this screen, recording the date and time they arrived, as well as their Field, Square, Locus, and Bucket Numbers. In archival projects it is best for data viewing, but not essential to enter the bucket data in the order that it was dug if possible.
+
+Later the buckets are read and the readings are recorded in the Readings screen. At the conclusion of the reading they are closed. This removes them from the buckets to be read on the readings screen and removes them from the checkin list as well.
+
+This process enables complete control of the pottery processing yard and its functions. 
+
+At anytime the yard manager knows how many buckets are in the yard, how long they have been there, what squares they came from etc. 
+ 
+ As with all Archaeolibrary lists, the list can be reordered for any field simply by clicking in the header once for ascending and twice for decending sorts. Finding all the Y10 Buckets for a given days reading is simple, precise and completely accurate.
+
+Bucket arrivals entered on this screen automatically initiate the proper database records upon which later processes are based.
+
+Database sequence names are assigned in a as data is entered, or in the case of archival projects from the Photos processing screen.  See the Center Screen Instructions for more on this Number and its uses.
+
+Record values can be edited easily if an entry mistake is made by simply clicking in the field and typing the correction. The database table automatically updates corrections to this list.
+
+Selecting a bucket in the list and clicking on the trash can at the bottom of the list will delete the record from the database.  Only individuals with senior management status or explicit permissions setting can use this button. Deletions are intended only for immediate correction of mistakes and are discouraged. Generally it is better to edit a record to correct mistakes than to delete it.
+
+Selecting a given field in the field popup, determines the values in the Square Popup minimizing data errors as much as possible. (try this in the demo by selecting field A, then B and inspecting the results in the Squares popup). Data entered into Locus and Basket fields is validated for format as it is typed, and for duplicates upon entry. The validation setting are flexible and can be altered in the _Setup.php file in the includes folder. The database ships with validation for five digit numerics between 10000 and 99999 for Loci and Buckets, almost any system can be accomadated via the setup file.  If your dig requires custom validation which for some reason can not be accomidated contact webmaster@archaeolibrary.com
+
+Because incoming buckets often come in in Sequence from a given square the values of the last entry persists. Often the Yard Manager can just quickly increment the last digit of the bucket number and click save for the next bucket.
+				
+Note: All time entries into archaeolibrary on any screen from anywhere in the world are automatically adjusted to the current time in Jerusalem.
+						
+						]]></mx:text>
+		</mx:TextArea>
+		<mx:Button label="Open Source" horizontalCenter="300" top="23" id="sourceButton" click="sourceButton_clickHandler(event)"/>
+	</mx:Canvas>	
+	</mx:ViewStack>
+</mx:Application>

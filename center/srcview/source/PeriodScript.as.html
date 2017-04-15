@@ -1,0 +1,79 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>PeriodScript.as</title>
+<link rel="stylesheet" type="text/css" href="../SourceStyles.css"/>
+</head>
+
+<body><pre>
+
+
+<span class="ActionScriptComment">//private var orderColumn:Number;
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">periodsObject</span>:<span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptString">'Id'</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">'ListOrder'</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">'Visible'</span>:<span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">'Period'</span>:<span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">'Code'</span>:<span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">'SubPeriod'</span>:<span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">}</span>;
+         
+ <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">closePeriodPop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> 
+ <span class="ActionScriptBracket/Brace">{</span>
+     <span class="ActionScriptComment">//thePeriodPopVal = ComboBox(event.target).selectedItem.label;
+</span>     <span class="ActionScriptComment">//fillPeriods();
+</span> <span class="ActionScriptBracket/Brace">}</span>    
+            
+<span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">filterResults</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptDefault_Text">fillPeriods</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">/*private function setOrder(event:DataGridEvent):void 
+{
+   // orderColumn = event.columnIndex;
+    var col:DataGridColumn = dataGrid.columns[orderColumn];
+    col.sortDescending = !col.sortDescending;
+    
+    event.preventDefault();
+    fill();
+}
+*/</span>
+
+<span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">fillPeriods</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> 
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptDefault_Text">CursorManager</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">setBusyCursor</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+
+    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">parameters</span>:<span class="ActionScriptOperator">*</span> <span class="ActionScriptOperator">=</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptString">"orderField"</span>: <span class="ActionScriptString">"ListOrder"</span><span class="ActionScriptOperator">,</span>
+        <span class="ActionScriptString">"orderDirection"</span>: <span class="ActionScriptString">"ASC"</span><span class="ActionScriptOperator">,</span> 
+        <span class="ActionScriptString">"filter"</span>: <span class="ActionScriptString">"Visible"</span><span class="ActionScriptOperator">,</span>
+        <span class="ActionScriptString">"filter_field"</span>: <span class="ActionScriptString">"Visible"</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptDefault_Text">doRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">"findPeriods"</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">parameters</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">fillPeriodHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">fillPeriodHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>:<span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">isError</span><span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">Alert</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">"Error: "</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">error</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span> 
+    <span class="ActionScriptReserved">else</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">arrPeriodPop</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">for each</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">row</span>:<span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">row</span><span class="ActionScriptBracket/Brace">)</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">temp</span>:<span class="ActionScriptOperator">*</span> <span class="ActionScriptOperator">=</span> {};
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">periodsObject</span><span class="ActionScriptBracket/Brace">)</span> 
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">temp</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">'Col'</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">row</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptDefault_Text">arrPeriodPop</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">temp</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptDefault_Text">CursorManager</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">removeBusyCursor</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+   <span class="ActionScriptComment">//     dataGrid.enabled = true;
+</span>    <span class="ActionScriptBracket/Brace">}</span>    
+<span class="ActionScriptBracket/Brace">}</span>
+
+
+</pre></body>
+</html>

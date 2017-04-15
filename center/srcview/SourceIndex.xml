@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of center</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node icon="cssIcon" label="history.css" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node icon="htmlIcon" label="historyFrame.html" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node icon="htmlIcon" label="index.template.html" url="source/html-template/index.template.html"/>
+			<node icon="swfIcon" label="playerProductInstall.swf" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="libs">
+		</node>
+		<node label="PHP_FLEX_SERVER_ROOT">
+		</node>
+		<node label="src">
+			<node icon="packageIcon" label="components" expanded="true">
+				<node icon="mxmlIcon" label="libraryRenderer.mxml" url="source/components/libraryRenderer.mxml.html"/>
+				<node icon="mxmlIcon" label="photoRenderer.mxml" url="source/components/photoRenderer.mxml.html"/>
+			</node>
+			<node label="icons">
+				<node icon="imageIcon" label="AddRecord.png" url="source/icons/AddRecord.png.html"/>
+				<node icon="imageIcon" label="DeleteRecord.png" url="source/icons/DeleteRecord.png.html"/>
+				<node icon="imageIcon" label="SearchRecord.png" url="source/icons/SearchRecord.png.html"/>
+			</node>
+			<node label="php">
+				<node label="Basket.php" url="source/php/Basket.php.txt"/>
+				<node label="Center.php" url="source/php/Center.php.txt"/>
+				<node label="functions.php" url="source/php/functions.php.txt"/>
+				<node label="GPS.php" url="source/php/GPS.php.txt"/>
+				<node label="link.php" url="source/php/link.php.txt"/>
+				<node label="Loca.php" url="source/php/Loca.php.txt"/>
+				<node label="Locus.php" url="source/php/Locus.php.txt"/>
+				<node label="Object.php" url="source/php/Object.php.txt"/>
+				<node label="Period.php" url="source/php/Period.php.txt"/>
+				<node label="Photo.php" url="source/php/Photo.php.txt"/>
+				<node label="Square.php" url="source/php/Square.php.txt"/>
+			</node>
+			<node icon="packageIcon" label="valueObjects" expanded="true">
+				<node icon="actionScriptIcon" label="Basket.as" url="source/valueObjects/Basket.as.html"/>
+				<node icon="actionScriptIcon" label="Loca.as" url="source/valueObjects/Loca.as.html"/>
+				<node icon="actionScriptIcon" label="Locus.as" url="source/valueObjects/Locus.as.html"/>
+				<node icon="actionScriptIcon" label="Object.as" url="source/valueObjects/Object.as.html"/>
+				<node icon="actionScriptIcon" label="Photo.as" url="source/valueObjects/Photo.as.html"/>
+				<node icon="actionScriptIcon" label="Square.as" url="source/valueObjects/Square.as.html"/>
+			</node>
+			<node icon="actionScriptIcon" label="BasketScript.as" url="source/BasketScript.as.html"/>
+			<node icon="actionScriptIcon" label="CenterScript.as" url="source/CenterScript.as.html"/>
+			<node icon="actionScriptIcon" label="GPSScript.as" url="source/GPSScript.as.html"/>
+			<node icon="mxmlAppIcon" selected="true" label="index.mxml" url="source/index.mxml.html"/>
+			<node icon="actionScriptIcon" label="LocaScript.as" url="source/LocaScript.as.html"/>
+			<node icon="actionScriptIcon" label="LocusScript.as" url="source/LocusScript.as.html"/>
+			<node icon="actionScriptIcon" label="LoginScript.as" url="source/LoginScript.as.html"/>
+			<node icon="actionScriptIcon" label="ObjectScript.as" url="source/ObjectScript.as.html"/>
+			<node icon="actionScriptIcon" label="PeriodScript.as" url="source/PeriodScript.as.html"/>
+			<node icon="actionScriptIcon" label="PhotoScript.as" url="source/PhotoScript.as.html"/>
+			<node icon="actionScriptIcon" label="SquareScript.as" url="source/SquareScript.as.html"/>
+		</node>
+	</nodes>
+</index>

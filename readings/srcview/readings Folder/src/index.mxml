@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#54BAF5, #FFFFFF]"
+				creationComplete="initApp()" layout="absolute" pageTitle="Readings"
+				themeColor="#FFFFFF" viewSourceURL="srcview/index.html">
+
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var arrProcessMethods:ArrayCollection = new ArrayCollection([ {label:"Readables"}, {label:"Body Shards"} ]);
+			protected function processMethod_closeHandler(event:DropdownEvent):void
+			{
+			 var theMethod:String = processMethod.selectedLabel;
+			  if(theMethod == "Readables"){
+				  periodGrid.visible = true;
+				  countGrid.visible = true;
+				  savedGrid.visible = true;
+				  PeriodInput.text = "";
+			  } else {
+				  periodGrid.visible = false;
+				  countGrid.visible = false;
+				  savedGrid.visible = false;
+			      PeriodInput.text = "Unknown";
+			  }
+			}
+
+			
+
+		]]>
+	</mx:Script>
+
+	<mx:Script source="LoginScript.as" />
+	<mx:Script source="ReadingsScript.as" />
+	<mx:Script source="PhotoCapture.as" />
+	
+	<mx:NumberValidator id="basketVal" source="{BasketInput}" property="text"  maxValue="99999"  minValue="10000" 
+						triggerEvent="" requiredFieldError="Invalid Basket Number"/> 
+	<mx:StringValidator id="periodVal" source="{PeriodInput}" property="text" minLength="5" triggerEvent="" 
+						requiredFieldError="Invalid Period" /> 
+	<mx:ViewStack id="applicationScreens" width="1024" height="100%" visible="{theVisible}" horizontalCenter="0">
+		<mx:Canvas id="home" width="100%" height="100%" >		
+			<mx:Button label="Home"  click="buttonHome_clickHandler(event)" id="buttonHome" width="100" top="21" right="10"/>
+			<mx:Button label="Setup"  click="buttonSettings_clickHandler(event)" id="buttonSettings" width="76" toolTip="Select Archaeolibrary.com in the permissions list and click 'Always Allow' to enable your camera as part of the documentation system"  top="21" horizontalCenter="238"/>
+			<mx:ComboBox id="cameraSelect" x="521" y="21" width="183" dataProvider="{cameraNames}"  toolTip="Select the Camera to use.&#13;Whatever appears in the camera view&#13;will be recorded with the record."   close="cameraSelect_closeHandler(event)" textAlign="center"/>
+			<mx:DataGrid id="readGrid" itemClick="setBucket()" change="setBucket()"
+						 dataProvider="{readDataArr}"
+						 rowCount="25"
+						 editable="false"
+						 resizableColumns="true" 
+						 x="23"  width="140" themeColor="#009DFF" bottom="20" top="290"
+						  toolTip="Select the Basket containing the items to be recorded.&#13;Selecting a basket sets the Video Display to its Active State&#13;if the Camera is Active.">
+				<mx:columns>		
+					<mx:DataGridColumn headerText="Square"  width="70"  textAlign="center" dataField="SquareCol" />
+					<mx:DataGridColumn headerText="Basket"   width="70" textAlign="center" dataField="BasketCol" />
+				</mx:columns>
+			</mx:DataGrid>	
+			<mx:DataGrid id="periodGrid" itemClick="setPeriod()"  
+						 dataProvider="{periodDataArr}"
+						 rowCount="25"
+						 editable="false"
+						 resizableColumns="true" 
+						 x="170"  themeColor="#009DFF" bottom="20" top="290"
+						  toolTip="Click to Select the Period of the item if known.&#13;Selecting a period sets the Video Display to its Active State.">
+				<mx:columns>				
+					<mx:DataGridColumn headerText="Period"  width="165"  textAlign="center" dataField="SubPeriodCol" />
+				</mx:columns>
+			</mx:DataGrid>		
+			<mx:DataGrid id="countGrid"  itemClick="setCount()"
+						 dataProvider="{countDataArr}"
+						 rowCount="6"
+						 editable="false"
+						 resizableColumns="true" 
+						 x="550"   themeColor="#009DFF" top="293" bottom="17" toolTip="Select the number of items if not recording items individually">
+				<mx:columns>				
+					<mx:DataGridColumn headerText="Qty"  width="45"  textAlign="center"  dataField="CountCol" />
+				</mx:columns>
+			</mx:DataGrid>	
+			<mx:DataGrid id="savedGrid"  itemClick="setSavedCount()"
+						 dataProvider="{countDataArr}"
+						 rowCount="6"
+						 editable="false"
+						 resizableColumns="true" 
+						 x="605"   themeColor="#009DFF" top="293" bottom="17"
+						 toolTip="Select the number of items saved, if not recording items individually">
+				<mx:columns>				
+					<mx:DataGridColumn headerText="Svd"  width="45"  textAlign="center"  dataField="SavedCol" />
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:DataGrid id="vesselsGrid"  itemClick="setVessel()"
+						 dataProvider="{vesselsDataArr}"
+						 rowCount="14"
+						 editable="false"
+						 resizableColumns="true" 
+						 x="345" themeColor="#009DFF" top="290" bottom="20"
+						  toolTip="Click the Vessel type and the part&#13;Vessel and Part make one item&#13;Reselect another pair if recording multiple items in one record.">
+				<mx:columns>				
+					<mx:DataGridColumn headerText="Vessel"  width="120"  textAlign="center"  dataField="VesselCol" />
+				</mx:columns>
+			</mx:DataGrid>
+			
+			<mx:DataGrid id="partsGrid"  itemClick="setPart()"
+						 dataProvider="{partsDataArr}"
+						 rowCount="14"
+						 editable="false"
+						 resizableColumns="true" 
+						 x="475"  themeColor="#009DFF" top="290" bottom="20" toolTip="Vessel and Part make one item.">
+				<mx:columns>				
+					<mx:DataGridColumn headerText="Part"  width="65"  textAlign="center"  dataField="PartCol" />
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:Label x="439" text="Period" width="165" textAlign="center" id="label1" top="226"/>
+			<mx:Label x="611" text="Count" textAlign="center" width="40" id="label2" top="226"/>		
+			<mx:DataGrid id="objectGrid"
+						 dataProvider="{objectDataArr}"
+						 rowCount="7"
+						 editable="true"
+						 resizableColumns="true"  click="objectGrid_clickHandler()" change="objectGrid_clickHandler()"
+						 headerRelease="setOrder(event);"
+						 x="23" y="63" themeColor="#009DFF" height="155" width="724"
+						  toolTip="List of the items recorded for the selected Bucket&#13;Clicking on an item will present its photo&#13;if it has been recorded in the area to the right.">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Name" width="50" textAlign="center" dataField="ShortNameCol" editable="false" />
+					<mx:DataGridColumn headerText="Type" width="50" textAlign="center" dataField="TypeCol" />
+					<mx:DataGridColumn headerText="Period" width="130" textAlign="center" dataField="PeriodCol" />
+					<mx:DataGridColumn headerText="Qty" width="30" textAlign="center" dataField="QuantityCol" editable="{permsModValue}" />
+					<mx:DataGridColumn headerText="+" width="30" textAlign="center" dataField="SavedCol" editable="{permsModValue}" />
+					<mx:DataGridColumn headerText="Description" width="170" dataField="DescriptionCol" editable="{permsModValue}" />					
+					<mx:DataGridColumn headerText="Comments"  width="125" dataField="CommentsCol" editable="{permsModValue}" />
+					<mx:DataGridColumn headerText="Disp"  width="50" dataField="DispositionCol" editable="{permsModValue}" />
+				</mx:columns>
+			</mx:DataGrid>		
+			<mx:ComboBox id="objectTypePop"  close="closeObjectTypePop()" width="100" toolTip="Select Type" x="826" top="247" dataProvider="{arrType}" />
+									
+			<mx:TextArea y="319" id="theDescription" editable="true" fontFamily="Arial" fontSize="18" width="344" height="98" wordWrap="true" right="16"/>
+			<mx:TextArea y="451" id="displayComments" editable="true" fontFamily="Arial" fontSize="18" width="344" height="95" wordWrap="true" right="16"/>
+			<mx:Label x="795" y="293" text="Description" width="80" textAlign="center" id="label4"/>
+			<mx:Label x="642" y="425" text="Comments" width="372" textAlign="center" id="label5"/>
+			<mx:Button x="938" y="247"  enabled="{permsAddValue}" click="insertBasket()" label="Enter" width="64" toolTip="Enter Basket Data" id="saveReadingButton" />	
+			<mx:TextInput id="BasketInput" width="90" editable="false" x="23"   backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#54BAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="FieldInput" width="25"  editable="false" x="122" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="SquareInput" width="90" editable="false"  x="158" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="LocusInput" width="90" editable="false"  x="253" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="DFCInput" editable="false" x="352" width="78" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="PeriodInput" editable="false"  x="439" width="165" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="CountInput" text="1" editable="false" x="611" width="40"  backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:TextInput id="SavedInput" text="1" editable="false"  x="657" width="40" backgroundAlpha="1.0" color="#FFFFFF" borderStyle="solid" fontSize="14" textAlign="center" borderThickness="0" backgroundColor="#5ABAF5" cornerRadius="15" top="247"/>
+			<mx:Label x="122" text="Fld" textAlign="center" width="25" id="label7" top="227"/>
+			<mx:Label x="158" text="Sq" textAlign="center" width="90" id="label6" top="226"/>
+			<mx:Label x="253" text="Locus" textAlign="center" width="90" id="label3" top="226"/>
+			<mx:Label x="352" text="Date" width="78" textAlign="center" id="label12" top="226"/>
+			<mx:Button id="button2" x="136" y="21"  click="clearBasket()" label="Close Bucket" width="115" toolTip="Click to Close the Selected Basket&#13;Closing a Basket removes it from the Baskets to be Read List&#13;and removes it from the list of Buckets in the Yard." />
+			<mx:TextInput  id="searchBasketNum"  editable="true" fontFamily="Arial" width="90" toolTip="Enter Basket Number to lookup, then click the Spyglass Search button" textAlign="center" fontSize="12" top="20" horizontalCenter="-92"/>
+			<mx:Button click="searchBasket()" id="searchBasketButton" icon="@Embed('icons/SearchRecord.png')" toolTip="Search by Basket"  top="21" horizontalCenter="-19"/>
+			<mx:Button click="initApp()" label="List Buckets" width="105" toolTip="List All Unread Baskets" id="button3" horizontalCenter="-201" top="21"/>
+			<mx:Button id="deleteReadingButton" enabled="{permsDeleteValue}" click="deleteItem()" icon="@Embed('icons/DeleteRecord.png')" toolTip="Delete Selected Record" x="755"  y="291"/>
+			
+			<mx:ComboBox id="dispositionPop"  close="closeDispositionPop()" width="103" x="708" toolTip="Select Disposition" top="247">
+				<mx:dataProvider>
+					<mx:String>Save</mx:String>
+					<mx:String>Discard</mx:String>
+					<mx:String>Save Diag</mx:String>
+					<mx:String>Save All</mx:String>
+					<mx:String>Mend</mx:String>		
+					<mx:String>Restore</mx:String>	
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:Label text="{loginName}" width="100" textAlign="center" id="labelName" color="#FFFFFF" fontWeight="bold" fontSize="14" fontFamily="Times New Roman" textDecoration="underline" fontStyle="italic" x="23" y="0"/>
+			<mx:Button label="Instructions"  id="buttonInstructions" width="100"  click="goToInstructions()" top="21" left="23" toolTip="Instructions for using this screen."/>
+			
+			<mx:Label x="657" text="Saved" textAlign="center" width="40" id="label0" top="226"/>
+			<mx:Label x="23" text="Bucket" textAlign="center" width="90" id="label9" top="227"/>
+			<mx:Button x="668" y="291"  enabled="{permsAddValue}" click="insertBasket()" label="Enter" width="79" toolTip="Enter Basket Data" id="saveReadingButton0" />
+			<mx:Label x="568" y="2" text="Select Camera"/>
+			<mx:ComboBox id="processMethod" x="796" y="21" width="110" close="processMethod_closeHandler(event)" dataProvider="{arrProcessMethods}"/>
+			
+			<mx:VideoDisplay id="videoDisplay" height="165" width="220" y="63" creationComplete="videoDisplay_creationComplete();" x="765"
+							 toolTip="Interactive video display when entering items&#13;Static display of recorded photos when an item is selected in the recorded items list at left" />
+			<mx:Image x="754" y="55" id="img" height="182" width="242" visible="true" source="{bitmapPath}" 
+					   toolTip="Interactive video display when entering items&#13;Static display of recorded photos when an item is selected in the recorded items list at left"/>
+			<mx:Label x="403" y="2" text="1.4"/>
+		</mx:Canvas>	
+		<mx:Canvas id="instructions" width="100%" height="100%" >	
+			<mx:Button id="homeButton" label="Home" width="100" click="goToHome()" top="21" left="23"/>
+			<mx:TextArea id="Instructions" width="848" top="61" bottom="50" horizontalCenter="0" editable="false" fontFamily="Verdana" fontSize="14" paddingLeft="25" paddingRight="25" paddingTop="15" paddingBottom="15" verticalScrollPolicy="auto">
+				<mx:text><![CDATA[The Readings screen is specially designed for rapidly recording Pottery finds. The screen can be used to record items in the traditional manner (x shards of period1, Y shards of Period2) or it can be used to quickly document and photograph shards individually. Group recording can be accompanied by photo documentation of shard groups or in the traditional text only manner.
+
+Photo recording of shards one by one allows substantial data analysis opportunities that are otherwise lost if shards are recorded as groups only. Single one by one recording on this screen is surprisingly fast and easy. Each individual shard can be documented in 3-5 seconds with this screen, far less time than required for either washing or reading processes currently in use. Multiple individuals can log on and record readings simultaneously.
+
+Upcoming Archaeolibrary releases will include the ability to generate a number of statistics from the finds if they are recorded singly. Square Area, Color parameters, and shape matching will all be available retroactively in the next release when the single recording system is used. These will provide substantial statistical analysis capabilities currently and glaringly lacking in Archaeological methods, and will offer advantages in statistically based population estimates, time-line refinement of pottery style changes and adoption rates by Tel (both specific and relative), and assistance in Pottery Reconstruction.
+
+Data Entry is based on a rapid click based recording system. The user clicks on a bucket number to select it and begin the process, then progressively clicks selections from the lists from Left to Right. Vessel and Part make one Entry, which is simply repeated to record multiple items in one record.  The contents and the order of these lists is determined by the director using the periods and lists screens.
+
+For single shard recording, each shard is recorded with four rapid fire mouse clicks,... period, vessel, part and the convenient Enter button located next to the description. The photo documentation this creates allows for easily locating the record later in the lab to enter comments and observations. Statistical analysis of shard populations by period, vessell type, etc etc etc, etc, etc is made possible by linking each shard to a database record. Archaeology, it is hoped is thus transformed to a statiscally based science.
+
+Once the readable shards have been entered selecting "Body Shards" from the processing popup disables the requirements of readable entries and allows each unreadable shard to be processed with a single click. Again, a low single digit precentage of the time required by current washing and reading practices.
+ 
+When the bucket is fully processed the Close Bucket Button closes the Bucket and removes it from the Buckets to Read list as well as removing it from the list of buckets in the Pottery Yard.
+
+Individual buckets can be looked up by entering the bucket number and clicking the Spyglass search button next to it. When the user is done with the bucket, clicking the "List Reads" Button refreshes the bucket list with buckets to be processed.
+
+The Individual values recorded can be corrected at anytime "on the Fly" after Entry. Simply lookup the bucket, click on the value to be corrected, and enter the correction. Only categorial values are editable in this manner. Values such as square number etc require the record to be deleted by a user to  whom the director has given delete permissions, and re-entered to be changed. If photo records are being generated, clicking on any item in the list will present the photo of the item in a slightly enlarged frame, preventing confusion in the entry process. Clicking on the basket's to be read list, or any of the entry lists will return the camera viewport to its active state to view and setup the next entry.
+
+The Camera is setup using the "Select Camera" Popup at the top of the screen. Most computers today come with a cam, which will be presented in the list along with cams that are attached via USB to the computer. Selecting the included cam will work, but in most cases will simply record photo after photo of the reader,... not the items being read :)
+
+It is important for future statistical capabilities that the Camera Field of vision is uniform for all items processed for the Dig and that a ruler or scale with black and white units appear at the very bottom edge of the field of vision. The visual yardstick  as well as the quality of the photo, shard placement etc is visually available at all times to the user as he or an assistant places and removes each shard from the camera field of view.
+
+The Camera Setup button at the top of the screen allows the software to access the camera. During setup clicking this button will present a list of websites. Locate Archaeolibrary.com and select "Allways Allow" to complete the setup process.
+
+Once the camera is setup and working, each time a record is entered a photo will be taken by the camera, properly named, stored and processed on the Server. This photo documentation is then included throughout the system. Clicking on a basket on the center screen later in the lab will thereafter automatically present a thumbnail photo on the right of each shard thus recorded for that bucket. Clicking on a bucket on the center screen presents the readable shards in the order they are recorded. So it is important to process readables first, those with a recorded time period, followed by the unreadables (background data at this point).
+
+If the excavation decides process only readable shards to start with, it is recommended in the strongest possible terms that all pottery should be saved by bucket number to ensure future access. Future processes will make the material which currently seems useless, quite useful.  Simply bagging each bucket in a standard nylon mesh bag (the familiar Orange Bag from the supermarket) with a durable identification tag, will allow for future access in processes that are anticipated to come on line within the decade. Even if its just a matter of "Bag and Bury" the nature of the nylon bag material and pottery will make this available to the future, and preservation in this manner of the source material requires MINIMAL extra effort.
+
+If only our predecessors had been so humble !
+						]]></mx:text>
+			</mx:TextArea>
+			<mx:Button label="Open Source" top="21" id="sourceButton" click="sourceButton_clickHandler(event)" right="23"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+</mx:Application>
